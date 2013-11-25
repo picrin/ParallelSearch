@@ -1,0 +1,2 @@
+yum install java-1.7.0-openjdk-devel.x86_64
+yum install git.x86_64
