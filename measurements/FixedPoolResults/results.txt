@@ -1,0 +1,198 @@
+amzn-ami-hvm-2013.09.1.x86_64-ebs (ami-5a20b86a) c3.8xlarge
+starting number of threads 1
+ending number of threads 32
+nodes number 100000
+children per node 30
+current number of threads 1
+318
+221
+1023
+212
+214
+current number of threads 2
+873
+812
+816
+709
+750
+current number of threads 3
+528
+439
+436
+448
+449
+current number of threads 4
+1110
+511
+461
+459
+457
+current number of threads 5
+479
+465
+451
+453
+406
+current number of threads 6
+521
+463
+470
+461
+477
+current number of threads 7
+467
+466
+462
+459
+544
+current number of threads 8
+471
+450
+467
+455
+455
+current number of threads 9
+463
+463
+469
+452
+476
+current number of threads 10
+459
+465
+436
+555
+460
+current number of threads 11
+465
+455
+470
+456
+461
+current number of threads 12
+460
+470
+468
+449
+466
+current number of threads 13
+464
+438
+462
+474
+466
+current number of threads 14
+508
+464
+453
+458
+468
+current number of threads 15
+475
+461
+469
+470
+465
+current number of threads 16
+474
+474
+465
+465
+472
+current number of threads 17
+528
+466
+468
+463
+457
+current number of threads 18
+466
+483
+471
+468
+477
+current number of threads 19
+479
+461
+473
+475
+480
+current number of threads 20
+483
+480
+507
+458
+487
+current number of threads 21
+469
+486
+461
+470
+464
+current number of threads 22
+484
+502
+491
+490
+472
+current number of threads 23
+469
+502
+476
+474
+513
+current number of threads 24
+471
+471
+469
+466
+463
+current number of threads 25
+470
+449
+460
+490
+495
+current number of threads 26
+471
+468
+473
+479
+477
+current number of threads 27
+476
+470
+469
+480
+468
+current number of threads 28
+471
+468
+484
+469
+473
+current number of threads 29
+466
+515
+460
+468
+462
+current number of threads 30
+467
+454
+490
+485
+472
+current number of threads 31
+497
+478
+469
+503
+461
+current number of threads 32
+449
+470
+487
+465
+465
+

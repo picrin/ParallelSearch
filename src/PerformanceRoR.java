@@ -46,7 +46,7 @@ public class PerformanceRoR {
 	}
 	
 	public static void main (String args[]){
-	    GraphFactory.loadConfig("config.txt");
+	    GraphFactory.loadConfig(args[0]);
 	    for(int i = GraphFactory.threadsNoStart; i <= GraphFactory.threadsNoEnd; i++){
 		    for(int ii = 0; ii < GraphFactory.measurmentsPerThread; ii++){
 		    	measurePerThread(i);
