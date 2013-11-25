@@ -1,1 +1,1 @@
-java -Xms50g -Xmx50g PerformanceRoR ClusterConfig.txt
+java7 -Xms50g -Xmx50g PerformanceRoR ClusterConfig.txt
