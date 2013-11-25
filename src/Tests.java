@@ -29,7 +29,7 @@ public class Tests {
     public void testSanityNode6() throws InterruptedException {
         DataGraph sanity = GraphFactory.makeSanityCheckGraph();
 
-        ExecutorService executor = Executors.newFixedThreadPool(GraphFactory.threadsNo);
+        ExecutorService executor = Executors.newFixedThreadPool(GraphFactory.threadsNoEnd);
         
         ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, sanity.nodes[5], sanity);
         graphExplorator.startWithTimer();
@@ -56,7 +56,7 @@ public class Tests {
     public void testSanityNode8() throws InterruptedException {
         DataGraph sanity = GraphFactory.makeSanityCheckGraph();
 
-        ExecutorService executor = Executors.newFixedThreadPool(GraphFactory.threadsNo);
+        ExecutorService executor = Executors.newFixedThreadPool(GraphFactory.threadsNoEnd);
         
         ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, sanity.nodes[7], sanity);
         graphExplorator.startWithTimer();

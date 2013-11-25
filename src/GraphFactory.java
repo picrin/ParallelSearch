@@ -1,15 +1,40 @@
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.LinkedHashMap;
 import java.util.Random;
-
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GraphFactory {
 	
     private GraphFactory(){};
+
+    static int threadsNoStart;
+    static int threadsNoEnd;
+    static int nodesNo;
+    static int maxChildren;
+    static int measurmentsPerThread;
     
-    static int threadsNo = 32;
-    static int nodesNo = 200_000;
-    static int maxChildren = 10;
+    static LinkedHashMap<Integer, ArrayList<Long>> results;
+    
+    public static void loadConfig(String filename){
+    	FileReader fin = null;
+    	try {
+			fin = new FileReader(filename);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	Scanner scanner = new Scanner(fin);
+    	threadsNoStart = Integer.parseInt(scanner.next());
+    	threadsNoEnd = Integer.parseInt(scanner.next());
+    	nodesNo = Integer.parseInt(scanner.next());
+    	maxChildren = Integer.parseInt(scanner.next());
+    	measurmentsPerThread = Integer.parseInt(scanner.next());
+    	results = new LinkedHashMap<Integer, ArrayList<Long>>();
+    }
     
     public static DataGraph makeRandomGraph(){
         Random generator = new Random();

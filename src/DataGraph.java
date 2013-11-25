@@ -17,15 +17,11 @@
  * all copies or substantial portions of the Software. 
  */
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class DataGraph{
-    static ExecutorService threadPool = Executors.newFixedThreadPool(GraphFactory.threadsNo);
     Node[] nodes = new Node[GraphFactory.nodesNo];
     int index = 0;
     public DataGraph(){}
-    
+
     public void addNode(Node node){
     	nodes[index] = node;
     	index++;
