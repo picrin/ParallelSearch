@@ -16,25 +16,26 @@
  */
 
 import java.util.ArrayList;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.RecursiveAction;
 
-public class Node {
-	public static ForkJoinPool threadPool;
-	
-	String filename;
-	
-	ConcurrentHashMap<Node, Integer> dependencies;
 
-	ArrayList<Node> children;
+public class OuterWorker extends RecursiveAction{
 	
-    public Node(String filename){
-        children = new ArrayList<Node>();
-        dependencies = new ConcurrentHashMap<Node, Integer>();
-        this.filename = filename;
-    }
-    
-    public void connectChild(Node child){
-        children.add(child);
-    }
+	private static final long serialVersionUID = 1697151285077771441L;
+	Node[] nodes;
+	public OuterWorker(DataGraph dg){
+		this.nodes = dg.nodes;
+	}
+	
+	@Override
+	protected void compute() {
+		ArrayList<InnerWorker> innerWorkers = new ArrayList<InnerWorker>(nodes.length);
+		for (Node node: nodes){
+			innerWorkers.add(new InnerWorker(node, node));
+		}
+		invokeAll(innerWorkers);
+	}
+	
+	
+
 }
