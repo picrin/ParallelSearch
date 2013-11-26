@@ -26,14 +26,13 @@ public class Node {
 	
 	String filename;
 	
-	ConcurrentHashMap<Node, Void> dependencies;
-	Worker worker;
+	ConcurrentHashMap<Node, Integer> dependencies;
 
-	//this doesn't need to be concurrent.
 	ArrayList<Node> children;
 	
     public Node(String filename){
         children = new ArrayList<Node>();
+        dependencies = new ConcurrentHashMap<Node, Integer>();
         this.filename = filename;
     }
     

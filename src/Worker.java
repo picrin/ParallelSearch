@@ -14,14 +14,17 @@ public class Worker extends RecursiveAction{
 	@Override
 	protected void compute(){
 		if (startNode.dependencies.containsKey(currentNode)){
+			//System.out.println("finished at: " + currentNode.filename);
+
 			return;
 		}
-		
-		startNode.dependencies.put(currentNode, null);
+		//System.out.println("putting to hashmap: " + currentNode.filename);
+		startNode.dependencies.put(currentNode, 0);
 		
 		ArrayList<Worker> workers = new ArrayList<Worker>(startNode.children.size());
-		
-		for (Node child: startNode.children){
+		//System.out.println(currentNode.filename + "has got" + currentNode.children.get(0).filename);
+		for (Node child: currentNode.children){
+			//System.out.println("adding children: " + child.filename);			
 			workers.add(new Worker(startNode, child));
 		}
 		invokeAll(workers);
