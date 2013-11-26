@@ -2,3 +2,4 @@ System.out.println(averagePerThread(1, 20, 4))
 1173.0
 System.out.println(averagePerThread(2, 20, 4));
 860.3333
+868.8

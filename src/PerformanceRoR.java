@@ -34,7 +34,6 @@ public class PerformanceRoR {
 		
 		return ((int) sum)/ (float)measurements.size();
 	}
-
 	
 	public static void printGraph(DataGraph dg){
 		for(Node node: dg.nodes){

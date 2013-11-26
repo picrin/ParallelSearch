@@ -22,16 +22,15 @@ import java.util.concurrent.RecursiveAction;
 public class OuterWorker extends RecursiveAction{
 	
 	private static final long serialVersionUID = 1697151285077771441L;
-	Node[] nodes;
+	ArrayList<Node> nodes;
 	public OuterWorker(DataGraph dg){
 		this.nodes = dg.nodes;
 	}
 	
 	@Override
 	protected void compute() {
-		ArrayList<InnerWorker> innerWorkers = new ArrayList<InnerWorker>(nodes.length);
+		ArrayList<InnerWorker> innerWorkers = new ArrayList<InnerWorker>(nodes.size());
 		for (Node node: nodes){
-			if (node == null) throw new RuntimeException("node is null");
 			innerWorkers.add(new InnerWorker(node, node));
 		}
 		invokeAll(innerWorkers);
