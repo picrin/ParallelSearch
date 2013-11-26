@@ -56,7 +56,7 @@ public class Tests {
 		OuterWorker forkjoin = new OuterWorker(dg);
 		magic.execute(forkjoin);
 		forkjoin.join();
-
+		
 		//1
 		Assert.assertTrue(nodeContains(dg.nodes[0], "1"));
 		Assert.assertTrue(nodeContains(dg.nodes[0], "2"));
@@ -64,7 +64,7 @@ public class Tests {
 		Assert.assertTrue(nodeContains(dg.nodes[0], "4"));
 		Assert.assertTrue(nodeContains(dg.nodes[0], "5"));
 		Assert.assertTrue(nodeContains(dg.nodes[0], "6"));
-
+		
 		//2
 		Assert.assertTrue(!nodeContains(dg.nodes[1], "1"));
 		Assert.assertTrue(nodeContains(dg.nodes[1], "2"));
@@ -81,7 +81,7 @@ public class Tests {
 		Assert.assertTrue(!nodeContains(dg.nodes[2], "4"));
 		Assert.assertTrue(nodeContains(dg.nodes[2], "5"));
 		Assert.assertTrue(nodeContains(dg.nodes[2], "6"));
-
+		
 		//4
 		Assert.assertTrue(!nodeContains(dg.nodes[3], "1"));
 		Assert.assertTrue(nodeContains(dg.nodes[3], "2"));
@@ -89,7 +89,7 @@ public class Tests {
 		Assert.assertTrue(nodeContains(dg.nodes[3], "4"));
 		Assert.assertTrue(nodeContains(dg.nodes[3], "5"));
 		Assert.assertTrue(nodeContains(dg.nodes[3], "6"));
-
+		
 		//5
 		Assert.assertTrue(!nodeContains(dg.nodes[4], "1"));
 		Assert.assertTrue(!nodeContains(dg.nodes[4], "2"));
@@ -97,7 +97,7 @@ public class Tests {
 		Assert.assertTrue(!nodeContains(dg.nodes[4], "4"));
 		Assert.assertTrue(nodeContains(dg.nodes[4], "5"));
 		Assert.assertTrue(nodeContains(dg.nodes[4], "6"));
-
+		
 		//6
 		Assert.assertTrue(!nodeContains(dg.nodes[5], "1"));
 		Assert.assertTrue(!nodeContains(dg.nodes[5], "2"));
@@ -105,7 +105,7 @@ public class Tests {
 		Assert.assertTrue(!nodeContains(dg.nodes[5], "4"));
 		Assert.assertTrue(nodeContains(dg.nodes[5], "5"));
 		Assert.assertTrue(nodeContains(dg.nodes[5], "6"));
-
+		
 	}
-
+	
 }

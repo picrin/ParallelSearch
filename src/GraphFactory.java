@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /*
  * The MIT License (MIT)
  * 
@@ -19,8 +21,10 @@ public class GraphFactory {
 	
     private GraphFactory(){};
 
-    static int threadsNumber = 1;
-    static int nodesNo = 6;
+    static int threadsNumber;
+    static int nodesNo = 1000;
+    static int sparseGraphChildren = 4;
+    
     
     public static DataGraph makeFunnyDependencies(){
 		DataGraph dg = new DataGraph();
@@ -45,6 +49,25 @@ public class GraphFactory {
         n5.connectChild(n6);
         n6.connectChild(n3);
         return dg;
+    }
+    
+    public static DataGraph makeRandomSparseGraph(){
+        Random generator = new Random();
+        DataGraph dg = new DataGraph();
+        Node[] nodes = new Node[nodesNo];
+        for(int i = 0; i < nodesNo; i++){
+            Node newNode = new Node(Integer.toString(i));
+            nodes[i] = newNode;
+            dg.addNode(newNode);
+        }
+        for(int i = 0; i < nodesNo; i++){
+            for(int ii = 0; ii < sparseGraphChildren; ii++){
+                nodes[i].connectChild(nodes[generator.nextInt(nodesNo)]);
+                //System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);
+                
+            }
+        }
+        return dg; 
     }
     
     public static DataGraph makeSanityCheckGraph(){

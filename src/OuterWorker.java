@@ -31,6 +31,7 @@ public class OuterWorker extends RecursiveAction{
 	protected void compute() {
 		ArrayList<InnerWorker> innerWorkers = new ArrayList<InnerWorker>(nodes.length);
 		for (Node node: nodes){
+			if (node == null) throw new RuntimeException("node is null");
 			innerWorkers.add(new InnerWorker(node, node));
 		}
 		invokeAll(innerWorkers);

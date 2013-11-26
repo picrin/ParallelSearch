@@ -30,15 +30,17 @@ public class InnerWorker extends RecursiveAction{
 	
 	@Override
 	protected void compute(){
+		if (startNode == null) throw new RuntimeException("startNode null");
+		if (currentNode == null) throw new RuntimeException("currentNode null");
+
 		if (startNode.dependencies.containsKey(currentNode)){
 			//System.out.println("finished at: " + currentNode.filename);
-
 			return;
 		}
 		//System.out.println("putting to hashmap: " + currentNode.filename);
 		startNode.dependencies.put(currentNode, 0);
 		
-		ArrayList<InnerWorker> workers = new ArrayList<InnerWorker>(startNode.children.size());
+		ArrayList<InnerWorker> workers = new ArrayList<InnerWorker>(currentNode.children.size());
 		//System.out.println(currentNode.filename + "has got" + currentNode.children.get(0).filename);
 		for (Node child: currentNode.children){
 			//System.out.println("adding children: " + child.filename);			
