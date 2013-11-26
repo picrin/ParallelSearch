@@ -13,7 +13,7 @@ public class PerformanceRoR {
 		DataGraph dg = GraphFactory.makeRandomSparseGraph();
 		
 		OuterWorker forkjoin = new OuterWorker(dg);
-		
+		System.gc();
 		final long startTime = System.currentTimeMillis();
 		magic.execute(forkjoin);
 		forkjoin.join();
@@ -48,6 +48,8 @@ public class PerformanceRoR {
 	public static void main (String args[]){
 		//printGraph(GraphFactory.makeRandomSparseGraph());
 		measurePerThread(1);
-		System.out.println(averagePerThread(2, 20, 4));
+		for(int i = 1; i <= 40; i++){
+			System.out.println(i + " " + averagePerThread(i, 20, 4));
+		}
 	}
 }
