@@ -17,29 +17,27 @@
  * all copies or substantial portions of the Software. 
  */
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ConcurrentHashMap;
 
-class Node/* implements Comparable<Node>*/{
-	final long id;
-	AtomicBoolean visited;
-	int index;
-	Node[] children;
+public class Node {
+	public static ForkJoinPool threadPool;
 	
-    public Node(long id, int estimatedChildren){
-        this.id = id;
-        visited = new AtomicBoolean(false);
-        children = new Node[estimatedChildren];
-        index = 0;
+	String filename;
+	
+	ConcurrentHashMap<Node, Void> dependencies;
+	Worker worker;
+
+	//this doesn't need to be concurrent.
+	ArrayList<Node> children;
+	
+    public Node(String filename){
+        children = new ArrayList<Node>();
+        this.filename = filename;
     }
     
     public void connectChild(Node child){
-        children[index] = child;
-        index++;
+        children.add(child);
     }
-    
-    public boolean visit(){
-    	return !visited.getAndSet(true);
-    }
-
-    
 }
