@@ -14,14 +14,16 @@ public class IncludeCrawler {
 	static String threadsNo = System.getenv("CRAWLER_THREADS");
 	public static void output(DataGraph dg){
 		for(Node node: dg.nodes){
-			int lastIndex = node.filename.lastIndexOf(".");
-			String extension = node.filename.substring(lastIndex);
-			if (extension.charAt(1) == 'c'){
-				System.out.print(node.filename.substring(0, lastIndex) +".o" + ": ");
-				for(Node descendant: node.dependencies.keySet()){
-					System.out.print(descendant.filename + " ");
+			if (node.filename.contains(".")){
+				int lastIndex = node.filename.lastIndexOf(".");
+				String extension = node.filename.substring(lastIndex);
+				if (extension.charAt(1) == 'c'){
+					System.out.print(node.filename.substring(0, lastIndex) +".o" + ": ");
+					for(Node descendant: node.dependencies.keySet()){
+						System.out.print(descendant.filename + " ");
+					}
+					System.out.println();
 				}
-				System.out.println();
 			}
 		}
 	}
@@ -86,7 +88,7 @@ public class IncludeCrawler {
 	}
 	
 	public static void main(String args[]){
-
+		
 		ArrayList<String> filenames = new ArrayList<String>();
 		for(String arg: args){
 			if (arg.length() >= 2 && arg.charAt(0) == '-' && arg.charAt(1) == 'I'){
@@ -134,8 +136,15 @@ public class IncludeCrawler {
 			GraphFactory.threadsNumber = 2;
 		ForkJoinPool magic = new ForkJoinPool(GraphFactory.threadsNumber);
 		OuterWorker outerworker = new OuterWorker(dg);
+		
+		/**
+		 * Uncomment the lines below to measure the algorithm speedup.
+		 */
+		//final long startTime = System.currentTimeMillis();
 		magic.execute(outerworker);
 		outerworker.join();
+		//final long stopTime = System.currentTimeMillis();
+		//System.out.println(startTime - stopTime);
 		output(dg);
 
 	}

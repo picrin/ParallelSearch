@@ -1,0 +1,30 @@
+Solution
+The task is accomplished with main focus put on heavy multithreading of the algorithm resolving dependencies. This unfortunately causes the program to print dependencies in non-deterministic order, however, it should not affect the operation of make. The solution operates in java 7 and is not backward compatible with java 6. This is due to exploiting ForkJoin utilities, which have been only added in java 7. The solution consists of the following files:
+
+DataGraph.java -- this is part of "another" data structure, this is where the OuterWorker initializes the processing
+IncludeCrawler.java -- this is the main file. All single-threaded IO operations are placed there. The multithreaded processing is invoked in line 144, by a call to ForkJoinPool.execute.
+Node.java -- this is part of "another" data structure, objects of this class are being processed by InnerWorkers.
+PerformanceRoR.java -- this is the algorithm's benchmarking tool. It benchmarks the code performance on 1 - 11 threads, 1000 nodes in a graph, 4 pseudo-random children per node.  
+GraphFactory.java -- this is a factory to produce random and hard-coded graphs for benchamarking and testing. 
+InnerWorker.java -- this is the busiest type of worker. Thousands of them are created during multi-threaded dependency-resolving.
+OuterWorker.java -- this is the initial worker.
+Tests.java -- these are tests, which check the correctness of the algorithm.
+
+Benchmarks
+The multithreaded part of the code (the algorithm) was benchmarked separatly from single-threaded IO. Testing was performed both on a two-core laptop and a 32-core Amazon server. The measurments were carried out for n threads in a thread pool, where n is in range [1, 11]. 1000 nodes with 4 random dependencies each were created. Dependencies were resolved 20 times, and only the last 15 results were measured. This was in order to let the openJDK's JVM warm up. An average of these measurements were taken and the record is given below:
+
+Laptop's performance:
+threadsNo	1			2			3			4			5			6			7			8			9			10			11
+time ms		1047.7	571.1	579.6	608.1		594.1	 	604.5		639.3		613.4		615.2		631.5		665.3		665.3
+
+Server's performance:
+threadsNo	1			2			3			4			5			6			7			8			9			10			11
+time ms		1 399.1		212.9		151.2		135.3		121.1		109.7		99.5		92.2		89.2		84.8		81.2
+
+These benchmarks can be replicated by compiling PerformanceRoR.java and executing PerformanceRoR.class. Please note the code might take ~ 40 seconds before producing the benchamark on standard output. This is due to multiple tests being run sequentially in order to get reliable statistics. It should be noted that the algorithm scales very well up to 11 machine threads.
+
+Possible imporovements:
+This solution can be improved by using dynamic programming, i.e. caching the dependencies for already resolved files. This might be hard to accomplish due to concurrency issues. It should be noted that similar execution improvement is not going to be observed for entire program, as single-threaded IO is going to be a bottle-neck. It should not be hard to multi-thread IO, but the speedup is going to be minute as IO on a block device is inherently sequential.
+
+Summary:
+To sum, my solution uses a robust, highly parallel and scalable algorithm for resolving dependencies, but it's shortcoming is a single threaded IO processing.
