@@ -8,10 +8,24 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Pattern;
 import java.io.FilenameFilter;
 import java.util.regex.Matcher;
-public class IO {
+public class IncludeCrawler {
 	static String cpath = System.getenv("CPATH");
 	static ArrayList<String> slashI = new ArrayList<String>();
-
+	static String threadsNo = System.getenv("CRAWLER_THREADS");
+	public static void output(DataGraph dg){
+		for(Node node: dg.nodes){
+			int lastIndex = node.filename.lastIndexOf(".");
+			String extension = node.filename.substring(lastIndex);
+			if (extension.charAt(1) == 'c'){
+				System.out.print(node.filename.substring(0, lastIndex) +".o" + ": ");
+				for(Node descendant: node.dependencies.keySet()){
+					System.out.print(descendant.filename + " ");
+				}
+				System.out.println();
+			}
+		}
+	}
+	
 	public static boolean isIn(String dir, final String filename){
 		if (filename == null || dir == null) return false;
 		File f = new File(dir);
@@ -90,28 +104,39 @@ public class IO {
 			if (filename != null){
 				String searchResult = searchEverywhere(filename);
 				if (searchResult != null){
-					System.out.println("searchResult " + searchResult);
+					//System.out.println("searchResult " + searchResult);
 					ArrayList<String> dependencies = parseFile(searchResult);
-					Node node = new Node(filename);
+					Node parent;
+					if (!dg.hashSet.containsKey(filename)){
+						parent = new Node(filename);
+						dg.hashSet.put(filename, parent);
+						dg.addNode(parent);
+					} else{
+						parent = dg.hashSet.get(filename);
+					}
 					for (String dependency: dependencies){
-						if (dg.hashSet.containsKey(dependency)){
-							node.children.add(dg.hashSet.get(dependency));
-						} else{
-							dg.addNode(node);
-							Node child = new Node(dependency);
+						Node child;
+						if (!dg.hashSet.containsKey(dependency)){
+							child = new Node(dependency);
 							dg.hashSet.put(dependency, child);
-							node.children.add(node);
+							dg.addNode(child);
+						} else{
+							child = dg.hashSet.get(dependency);
 						}
+						parent.children.add(child);
 					}
 				}
 			}
 		}
-		GraphFactory.threadsNumber = 2;
+		if (threadsNo != null)
+			GraphFactory.threadsNumber = Integer.parseInt(threadsNo);
+		else 
+			GraphFactory.threadsNumber = 2;
 		ForkJoinPool magic = new ForkJoinPool(GraphFactory.threadsNumber);
 		OuterWorker outerworker = new OuterWorker(dg);
 		magic.execute(outerworker);
 		outerworker.join();
-		PerformanceRoR.printGraph(dg);
+		output(dg);
 
 	}
 }
