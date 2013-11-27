@@ -1,0 +1,38 @@
+1 397.93332
+2 213.13333
+3 153.86667
+4 136.73334
+5 119.13333
+6 106.2
+7 99.066666
+8 92.6
+9 89.666664
+10 83.73333
+11 82.0
+Exception in thread "main" java.lang.OutOfMemoryError
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at java.util.concurrent.ForkJoinTask.getThrowableException(ForkJoinTask.java:536)
+	at java.util.concurrent.ForkJoinTask.reportResult(ForkJoinTask.java:596)
+	at java.util.concurrent.ForkJoinTask.join(ForkJoinTask.java:640)
+	at PerformanceRoR.measurePerThread(PerformanceRoR.java:19)
+	at PerformanceRoR.averagePerThread(PerformanceRoR.java:27)
+	at PerformanceRoR.main(PerformanceRoR.java:52)
+Caused by: java.lang.OutOfMemoryError: unable to create new native thread
+	at java.lang.Thread.start0(Native Method)
+	at java.lang.Thread.start(Thread.java:713)
+	at java.util.concurrent.ForkJoinPool.addWorker(ForkJoinPool.java:1132)
+	at java.util.concurrent.ForkJoinPool.signalWork(ForkJoinPool.java:692)
+	at java.util.concurrent.ForkJoinWorkerThread.pushTask(ForkJoinWorkerThread.java:466)
+	at java.util.concurrent.ForkJoinTask.fork(ForkJoinTask.java:622)
+	at java.util.concurrent.ForkJoinTask.invokeAll(ForkJoinTask.java:777)
+	at OuterWorker.compute(OuterWorker.java:36)
+	at java.util.concurrent.RecursiveAction.exec(RecursiveAction.java:177)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:334)
+	at java.util.concurrent.ForkJoinWorkerThread.execTask(ForkJoinWorkerThread.java:604)
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:784)
+	at java.util.concurrent.ForkJoinPool.work(ForkJoinPool.java:646)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:398)
+
