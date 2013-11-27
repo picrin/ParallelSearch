@@ -38,8 +38,8 @@ public class PerformanceRoR {
 	public static void printGraph(DataGraph dg){
 		for(Node node: dg.nodes){
 			System.out.print(node.filename + ": ");
-			for(Node child: node.children){
-				System.out.print(child.filename + " ");
+			for(Node descendant: node.dependencies.keySet()){
+				System.out.print(descendant.filename + " ");
 			}
 			System.out.println();
 		}

@@ -109,6 +109,7 @@ public class Tests {
 		Assert.assertTrue(nodeContains(dg.nodes.get(5), "5"));
 		Assert.assertTrue(nodeContains(dg.nodes.get(5), "6"));
 		
+		PerformanceRoR.printGraph(dg);
 	}
 	
 }

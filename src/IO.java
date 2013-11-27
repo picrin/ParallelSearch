@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool;
 import java.util.regex.Pattern;
 import java.io.FilenameFilter;
 import java.util.regex.Matcher;
@@ -61,7 +62,8 @@ public class IO {
 			if (m.matches()){
 				int firstOccurence = line.indexOf("#include \"");
 				int lastOccurence = line.lastIndexOf("\"");
-				System.out.println(line.substring(firstOccurence + 10, lastOccurence));
+				includes.add(line.substring(firstOccurence + 10, lastOccurence));
+				//System.out.println(line.substring(firstOccurence + 10, lastOccurence));
 			}
 
 		}
@@ -83,13 +85,33 @@ public class IO {
 				filenames.add(arg);
 			}
 		}
+		DataGraph dg = new DataGraph();
 		for(String filename: filenames){
 			if (filename != null){
 				String searchResult = searchEverywhere(filename);
 				if (searchResult != null){
-					parseFile(searchResult);
+					System.out.println("searchResult " + searchResult);
+					ArrayList<String> dependencies = parseFile(searchResult);
+					Node node = new Node(filename);
+					for (String dependency: dependencies){
+						if (dg.hashSet.containsKey(dependency)){
+							node.children.add(dg.hashSet.get(dependency));
+						} else{
+							dg.addNode(node);
+							Node child = new Node(dependency);
+							dg.hashSet.put(dependency, child);
+							node.children.add(node);
+						}
+					}
 				}
 			}
 		}
+		GraphFactory.threadsNumber = 2;
+		ForkJoinPool magic = new ForkJoinPool(GraphFactory.threadsNumber);
+		OuterWorker outerworker = new OuterWorker(dg);
+		magic.execute(outerworker);
+		outerworker.join();
+		PerformanceRoR.printGraph(dg);
+
 	}
 }

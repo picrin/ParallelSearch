@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+
 
 /*
  * The MIT License (MIT)
@@ -18,6 +20,7 @@ import java.util.ArrayList;
  */
 
 public class DataGraph{
+	HashMap<String, Node> hashSet = new HashMap<String, Node>();
     ArrayList<Node> nodes = new ArrayList<Node>();
     public DataGraph(){}
 
