@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 
 
@@ -9,7 +10,7 @@ public class PerformanceRoR {
 	    
 	    
 		DataGraph random = GraphFactory.makeRandomSparseGraph();
-	    ExecutorService executor = Executors.newFixedThreadPool(noThreads);
+	    ExecutorService executor = new ForkJoinPool(noThreads);
 	    
 	    ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, random.nodes[0], random);
 	    graphExplorator.startWithTimer();
