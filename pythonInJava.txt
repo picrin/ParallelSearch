@@ -1,0 +1,9 @@
+	    ScriptEngineManager mgr = new ScriptEngineManager();
+	    ScriptEngine pyEngine = mgr.getEngineByName("python");
+	    System.out.println(pyEngine);
+	    try{
+	    	pyEngine.eval("print \"hello world\"");
+	    } catch (Exception e){
+	    	e.printStackTrace();
+	    }
+
