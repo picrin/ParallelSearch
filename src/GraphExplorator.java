@@ -20,13 +20,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 abstract class GraphExplorator implements Runnable{
+	static public Thread mainThread;
     static protected AtomicInteger counter = new AtomicInteger(1);
     static protected ExecutorService executor;
     static public long startTime;
     static public long stopTime;
     final protected Node start;
     final protected DataGraph dg;
-    public static boolean finished;
 
     protected GraphExplorator(Node start, DataGraph dg){
         this.start = start;
@@ -41,14 +41,13 @@ abstract class GraphExplorator implements Runnable{
     public GraphExplorator(ExecutorService executor, Node start, DataGraph dg){
         this(start, dg);
         GraphExplorator.executor = executor;
-        finished = false;
     }
     
     protected void whenFinished(){
     	stopTime = System.currentTimeMillis();
         counter.set(1);
-    	executor.shutdown();
-        finished = true;
+    	//executor.shutdown();
+        mainThread.interrupt();
     }
     @Override
     abstract public void run();

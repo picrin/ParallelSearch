@@ -2,27 +2,23 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 
 
 public class PerformanceRoR {
+	
 	public static void measurePerThread(int noThreads){
-	    
-	    
 		DataGraph random = GraphFactory.makeRandomSparseGraph();
 	    ExecutorService executor = new ForkJoinPool(noThreads);
 	    
 	    ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, random.nodes[0], random);
-	    graphExplorator.startWithTimer();
-	    while (GraphExplorator.finished == false){
-	    	//System.out.println(GraphExplorator.finished);
-	    	try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    }
 	    
+	    GraphExplorator.mainThread = Thread.currentThread();
+	    graphExplorator.startWithTimer();
+	    try {
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+		} catch (InterruptedException e) {}
 	    
 	    ArrayList<Long> resultsPerThread = GraphFactory.results.get(noThreads);
 	    
