@@ -34,7 +34,12 @@ abstract class GraphExplorator implements Runnable{
     }
     
     public void startWithTimer(){
+    	System.gc();
     	startTime = System.currentTimeMillis();
+    	executor.execute(this);
+    }
+    
+    public void startExploration(){
     	executor.execute(this);
     }
     
@@ -44,6 +49,7 @@ abstract class GraphExplorator implements Runnable{
     }
     
     protected void whenFinished(){
+    	//uncomment this to carry out the measurement
     	stopTime = System.currentTimeMillis();
         counter.set(1);
     	//executor.shutdown();
