@@ -1,0 +1,71 @@
+starting number of threads 1
+ending number of threads 6
+nodes number 1000000
+children per node 30
+current number of threads 1
+12931
+12399
+12595
+12496
+12540
+12426
+12418
+12711
+12415
+12422
+current number of threads 2
+6328
+6019
+6022
+6417
+6345
+6341
+6328
+6285
+6289
+6322
+current number of threads 3
+4281
+4252
+4265
+4230
+4242
+4244
+4234
+4243
+4231
+4253
+current number of threads 4
+3236
+3204
+3194
+3186
+3191
+3196
+3197
+3202
+3196
+3203
+current number of threads 5
+2576
+2606
+2578
+2587
+2597
+2589
+2595
+2598
+2602
+2596
+current number of threads 6
+2180
+2178
+2187
+2168
+2180
+2177
+2186
+2187
+2181
+2191
+

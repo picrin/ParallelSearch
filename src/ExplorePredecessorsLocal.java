@@ -24,7 +24,8 @@ import java.util.concurrent.Future;
 final class ExplorePredecessorsLocal extends GraphExplorator{
 
     protected int innerCounter;
-    public static int spawnRate = 20;
+    //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
+    public static int spawnRate = 20; 
     protected ExplorePredecessorsLocal(Node start, DataGraph dg){
         super(start, dg);
 
@@ -55,12 +56,11 @@ final class ExplorePredecessorsLocal extends GraphExplorator{
 	                    		e.printStackTrace();
 	                    	}*/
             			}
-	            	} else {	
+	            	} else {
 	            		stackedNodes.offer(node.children);
             		}
                 }
               	//System.out.println(stackedNodes.isEmpty());
-
             }
         }
         //System.out.println(counter);

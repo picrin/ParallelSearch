@@ -155,12 +155,12 @@ public class Tests {
         
         ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, random.nodes.get(5), random);
 	    GraphExplorator.mainThread = Thread.currentThread();
-        try{
+        /*try{
         	graphExplorator.startWithTimer();
         	//throw new InterruptedException();
         	executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
         } catch (InterruptedException e) {e.printStackTrace();}
-        //System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
+        *///System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
         
         Assert.assertTrue(random.nodes.get(2100).visited.get());
         Assert.assertTrue(random.nodes.get(1700).visited.get());

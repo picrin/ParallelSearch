@@ -45,7 +45,7 @@ abstract class GraphExplorator implements Runnable{
     
     public void startExploration(){
     	counter.set(1);
-    	executor.execute(this);
+    	executor.submit(this);
     }
     
     public GraphExplorator(ExecutorService executor, Node start, DataGraph dg){

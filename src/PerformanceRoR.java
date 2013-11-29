@@ -1,6 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +19,6 @@ public class PerformanceRoR {
 	    try {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
 		} catch (InterruptedException e) {}
-	    
 	    ArrayList<Long> resultsPerThread = GraphFactory.results.get(noThreads);
 	    
 	    if (resultsPerThread == null){
@@ -28,6 +27,25 @@ public class PerformanceRoR {
 	    }
 	    resultsPerThread.add(GraphExplorator.stopTime - GraphExplorator.startTime);
 	}
+	
+	public static long DFS(){
+		LinkedList<Node> stack = new LinkedList<Node>();
+		DataGraph random = GraphFactory.makeRandomSparseGraph();
+		Node start = random.nodes.get(0);
+		long startTime = System.currentTimeMillis();
+		stack.push(start);
+		while (!stack.isEmpty()){
+			Node current = stack.pop();
+			current.visit();
+			for(Node child: current.children){
+				if (child.visit()){
+					stack.push(child);
+				}
+			}
+		}
+		long stopTime = System.currentTimeMillis();
+		return stopTime - startTime;
+	}		
 	
 	public static void prettyPrint(){
 		System.out.println("starting number of threads " + GraphFactory.threadsNoStart);
@@ -44,8 +62,17 @@ public class PerformanceRoR {
 	
 	public static void main (String args[]){
 	    GraphFactory.loadConfig(args[0]);
+    	ArrayList<Long> results = new ArrayList<Long>();
+    	for(int ii = 0; ii < 10; ii++){
+	    	results.add(DFS());
+	    }
+    	System.out.println("DepthFirstSearch");
+    	for(long time: results){
+    		System.out.println(time);
+    	}
+
 	    for(int i = GraphFactory.threadsNoStart; i <= GraphFactory.threadsNoEnd; i++){
-		    for(int ii = 0; ii < GraphFactory.measurmentsPerThread; ii++){
+	    	for(int iii = 0; iii < GraphFactory.measurmentsPerThread; iii++){
 		    	measurePerThread(i);
 		    }
 		}
