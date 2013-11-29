@@ -17,24 +17,22 @@
  * all copies or substantial portions of the Software. 
  */
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class Node/* implements Comparable<Node>*/{
 	final long id;
 	AtomicBoolean visited;
-	int index;
-	Node[] children;
+	ArrayList<Node> children;
 	
     public Node(long id, int estimatedChildren){
         this.id = id;
         visited = new AtomicBoolean(false);
-        children = new Node[estimatedChildren];
-        index = 0;
+        children = new ArrayList<Node>(estimatedChildren);
     }
     
     public void connectChild(Node child){
-        children[index] = child;
-        index++;
+        children.add(child);
     }
     
     public boolean visit(){

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 
 /*
@@ -18,13 +20,11 @@
  */
 
 public class DataGraph{
-    Node[] nodes = new Node[GraphFactory.nodesNo];
-    int index = 0;
+    ArrayList<Node> nodes = new ArrayList<Node>();
     public DataGraph(){}
 
     public void addNode(Node node){
-    	nodes[index] = node;
-    	index++;
+    	nodes.add(node);
     }
     
 }

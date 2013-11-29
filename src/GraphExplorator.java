@@ -15,11 +15,14 @@
  * all copies or substantial portions of the Software. 
  */
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 abstract class GraphExplorator implements Runnable{
+	protected LinkedList<ArrayList<Node>> stackedNodes;
 	static public Thread mainThread;
     static protected AtomicInteger counter = new AtomicInteger(1);
     static protected ExecutorService executor;
@@ -31,15 +34,17 @@ abstract class GraphExplorator implements Runnable{
     protected GraphExplorator(Node start, DataGraph dg){
         this.start = start;
         this.dg = dg;
+        stackedNodes = new LinkedList<ArrayList<Node>>();
     }
     
     public void startWithTimer(){
     	System.gc();
     	startTime = System.currentTimeMillis();
-    	executor.execute(this);
+    	startExploration();
     }
     
     public void startExploration(){
+    	counter.set(1);
     	executor.execute(this);
     }
     
@@ -52,8 +57,10 @@ abstract class GraphExplorator implements Runnable{
     	//uncomment this to carry out the measurement
     	stopTime = System.currentTimeMillis();
         counter.set(1);
-    	//executor.shutdown();
-        mainThread.interrupt();
+        
+        //System.out.println("shutdown");
+    	executor.shutdown();
+        //mainThread.interrupt();
     }
     @Override
     abstract public void run();

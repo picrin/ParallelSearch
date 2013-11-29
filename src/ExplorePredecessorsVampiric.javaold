@@ -17,11 +17,11 @@ import java.util.concurrent.ExecutorService;
  * all copies or substantial portions of the Software. 
  */
 
-    final class ExplorePredecessors extends GraphExplorator{
-        protected ExplorePredecessors(Node start, DataGraph dg){
+    final class ExplorePredecessorsVampiric extends GraphExplorator{
+        protected ExplorePredecessorsVampiric(Node start, DataGraph dg){
             super(start, dg);
         }
-        public ExplorePredecessors(ExecutorService executor, /*Callable<?> voidToCall,*/Node start, DataGraph dg){
+        public ExplorePredecessorsVampiric(ExecutorService executor, Node start, DataGraph dg){
         	super(executor, start, dg);
         }
         @Override
@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutorService;
                     Node nextChild = current.children[i];
                     if (!nextChild.visited.get()){
                     	counter.incrementAndGet();
-                    	executor.execute(new ExplorePredecessors(current.children[i], dg));
+                    	executor.execute(new ExplorePredecessorsVampiric(current.children[i], dg));
                     }
                 }
                 if (current.index > 0){
