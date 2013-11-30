@@ -1,0 +1,259 @@
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                16
+On-line CPU(s) list:   0-15
+Thread(s) per core:    2
+Core(s) per socket:    8
+Socket(s):             1
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 62
+Stepping:              4
+CPU MHz:               2793.302
+BogoMIPS:              5586.60
+Hypervisor vendor:     Xen
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              25600K
+NUMA node0 CPU(s):     0-15
+
+DepthFirstSearch
+5307
+4685
+4700
+4753
+4720
+7882
+4736
+3753
+4771
+3811
+starting number of threads 1
+ending number of threads 20
+nodes number 1000000
+children per node 30
+current number of threads 1
+12698
+12535
+12518
+12570
+12514
+12805
+12705
+12437
+12533
+12478
+current number of threads 2
+6346
+6329
+6336
+6381
+6410
+6351
+6392
+6346
+6364
+6334
+current number of threads 3
+4277
+4311
+4258
+4286
+4308
+4285
+4259
+4276
+4285
+4268
+current number of threads 4
+3233
+3239
+3218
+3217
+3230
+3223
+3259
+3215
+3231
+3206
+current number of threads 5
+2597
+2597
+2625
+2600
+2599
+2599
+2598
+2594
+2591
+2641
+current number of threads 6
+2182
+2190
+2180
+2184
+2194
+2195
+2187
+2198
+2201
+2203
+current number of threads 7
+1901
+1899
+1899
+1907
+1894
+1915
+1895
+1905
+1906
+1901
+current number of threads 8
+1689
+1681
+1694
+1688
+1696
+1689
+1703
+1688
+1692
+1693
+current number of threads 9
+1570
+1572
+1575
+1572
+1573
+1573
+1567
+1572
+1573
+1570
+current number of threads 10
+1473
+1465
+1472
+1470
+1481
+1470
+1468
+1470
+1468
+1461
+current number of threads 11
+1393
+1392
+1383
+1387
+1377
+1378
+1381
+1377
+1388
+1381
+current number of threads 12
+1306
+1318
+1316
+1360
+1319
+1314
+1315
+1312
+1318
+1315
+current number of threads 13
+1267
+1251
+1245
+1249
+1252
+1247
+1247
+1248
+1250
+1255
+current number of threads 14
+1198
+1196
+1201
+1204
+1203
+1197
+1200
+1195
+1198
+1197
+current number of threads 15
+1154
+1152
+1162
+1153
+1150
+1155
+1152
+1152
+1151
+1154
+current number of threads 16
+1106
+1107
+1110
+1108
+1117
+1109
+1114
+1109
+1110
+1107
+current number of threads 17
+1112
+1116
+1110
+1114
+1113
+1121
+1109
+1112
+1107
+1106
+current number of threads 18
+1110
+1117
+1113
+1109
+1119
+1110
+1111
+1121
+1115
+1110
+current number of threads 19
+1112
+1114
+1110
+1113
+1111
+1115
+1112
+1115
+1109
+1112
+current number of threads 20
+1113
+1112
+1115
+1116
+1111
+1117
+1115
+1114
+1115
+1116
+

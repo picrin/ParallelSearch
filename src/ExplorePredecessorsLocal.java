@@ -25,7 +25,7 @@ final class ExplorePredecessorsLocal extends GraphExplorator{
 
     protected int innerCounter;
     //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
-    public static int spawnRate = 20; 
+    public static int spawnRate = 200; 
     protected ExplorePredecessorsLocal(Node start, DataGraph dg){
         super(start, dg);
 
@@ -45,7 +45,7 @@ final class ExplorePredecessorsLocal extends GraphExplorator{
         	for(Node node: nodes){
             	if (node.visit()){
             		innerCounter += 1;
-            		if (innerCounter % spawnRate == 19){
+            		if (innerCounter % spawnRate == spawnRate - 1){
             			for(Node child: node.children){
             				counter.incrementAndGet();
             				//Future<?> future = 

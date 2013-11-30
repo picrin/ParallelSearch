@@ -143,9 +143,79 @@ public class Tests {
         Assert.assertFalse(sanity.nodes.get(6).visited.get());
         //System.out.println("================ finished test ================");
     }
+    
+    @Test
+    public void testCorrectness(){
+        GraphFactory.nodesNo = 150;
+        GraphFactory.threadsNoEnd = 10;
+        GraphFactory.maxChildren = 2;
+		
+        LinkedList<Node> stack = new LinkedList<Node>();
+        DataGraph random = GraphFactory.makeRandomSparseGraph();
+		Node start = random.nodes.get(0);
+		
+		//DFS
+		stack.push(start);
+		while (!stack.isEmpty()){
+			Node current = stack.pop();
+			current.visit();
+			for(Node child: current.children){
+				if (child.visit()){
+					stack.push(child);
+				}
+			}
+		}
+
+		ArrayList<Integer> DFSVisited = new ArrayList<Integer>();
+		ArrayList<Integer> ParallelSearchVisited = new ArrayList<Integer>();
+
+		for(int i = 0; i < random.nodes.size(); i++){
+			if(random.nodes.get(i).visited.get()){
+        		DFSVisited.add(i);
+        	}
+        }
+		
+
+		ExecutorService executor = new ForkJoinPool(2);
+        
+        ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, start, random);
+	    GraphExplorator.mainThread = Thread.currentThread();
+
+		for(int i = 0; i < random.nodes.size(); i++){
+			if(random.nodes.get(i).visited.get()){
+        		ParallelSearchVisited.add(i);
+        	}
+        }
+
+	    
+        try{
+        	graphExplorator.startWithTimer();
+        	executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+        } catch (InterruptedException e) {}
+        
+        
+		for(Node node: random.nodes){
+			node.visited.set(false);
+		}
+		
+		
+		for(int i = 0; i < random.nodes.size(); i++){
+			if(random.nodes.get(i).visited.get()){
+        		DFSVisited.add(i);
+        	}
+        }
+		
+		assertTrue(ParallelSearchVisited.size() == DFSVisited.size());
+		for(int i = 0; i < ParallelSearchVisited.size(); i++){
+			//System.out.println(ParallelSearchVisited.get(i) + " " + DFSVisited.get(i));
+			assertTrue(ParallelSearchVisited.get(i).equals(DFSVisited.get(i)));
+		}
+		
+		
+    }
 
     @Test
-    public void testBigRandom() throws InterruptedException {
+    public void testBigRandom() {
         GraphFactory.nodesNo = 3000;
         GraphFactory.threadsNoEnd = 2;
         GraphFactory.maxChildren = 50;
@@ -155,12 +225,12 @@ public class Tests {
         
         ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, random.nodes.get(5), random);
 	    GraphExplorator.mainThread = Thread.currentThread();
-        /*try{
+        try{
         	graphExplorator.startWithTimer();
         	//throw new InterruptedException();
         	executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
         } catch (InterruptedException e) {e.printStackTrace();}
-        *///System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
+        //System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
         
         Assert.assertTrue(random.nodes.get(2100).visited.get());
         Assert.assertTrue(random.nodes.get(1700).visited.get());
