@@ -88,7 +88,7 @@ public class Tests {
 
         ExecutorService executor = new ForkJoinPool(GraphFactory.threadsNoEnd);
         
-        ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, sanity.nodes.get(5), sanity);
+        ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, sanity.nodes.get(5), sanity);
 	    GraphExplorator.mainThread = Thread.currentThread();
         try{
         	graphExplorator.startWithTimer();
@@ -121,7 +121,7 @@ public class Tests {
         DataGraph sanity = GraphFactory.makeSanityCheckGraph();
         ExecutorService executor = new ForkJoinPool(GraphFactory.threadsNoEnd);
         
-        ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, sanity.nodes.get(7), sanity);
+        ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, sanity.nodes.get(7), sanity);
 	    GraphExplorator.mainThread = Thread.currentThread();
 
         try{
@@ -146,7 +146,7 @@ public class Tests {
     
     @Test
     public void testCorrectness(){
-        GraphFactory.nodesNo = 150;
+        GraphFactory.nodesNo = 300000;
         GraphFactory.threadsNoEnd = 10;
         GraphFactory.maxChildren = 2;
 		
@@ -178,7 +178,7 @@ public class Tests {
 
 		ExecutorService executor = new ForkJoinPool(2);
         
-        ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, start, random);
+        ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, start, random);
 	    GraphExplorator.mainThread = Thread.currentThread();
 
 		for(int i = 0; i < random.nodes.size(); i++){
@@ -223,7 +223,7 @@ public class Tests {
 
         ExecutorService executor = new ForkJoinPool(GraphFactory.threadsNoEnd);
         
-        ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, random.nodes.get(5), random);
+        ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, random.nodes.get(5), random);
 	    GraphExplorator.mainThread = Thread.currentThread();
         try{
         	graphExplorator.startWithTimer();

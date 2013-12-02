@@ -12,7 +12,7 @@ public class PerformanceRoR {
 		DataGraph random = GraphFactory.makeRandomSparseGraph();
 	    ExecutorService executor = new ForkJoinPool(noThreads);
 	    
-	    ExplorePredecessorsLocal graphExplorator = new ExplorePredecessorsLocal(executor, random.nodes.get(0), random);
+	    ExplorePredecessors graphExplorator = new ExplorePredecessors(executor, random.nodes.get(0), random);
 	    
 	    GraphExplorator.mainThread = Thread.currentThread();
 	    graphExplorator.startWithTimer();

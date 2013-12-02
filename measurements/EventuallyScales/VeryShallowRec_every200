@@ -1,0 +1,237 @@
+nodes number 1000000
+children per node 30
+
+DepthFirstSearch
+4133
+3706
+3512
+4404
+3733
+3739
+3954
+3316
+4356
+3189
+
+Nondeterministc Parallel Search
+current number of threads 1
+5012
+4805
+4821
+4819
+4840
+4818
+4846
+4822
+4874
+4898
+current number of threads 2
+2434
+2435
+2435
+2427
+2446
+2435
+2425
+2431
+2420
+2436
+current number of threads 3
+1628
+1627
+1629
+1623
+1623
+1626
+1626
+1633
+1692
+1629
+current number of threads 4
+1228
+1227
+1225
+1227
+1224
+1222
+1224
+1227
+1227
+1225
+current number of threads 5
+986
+1007
+984
+984
+986
+984
+986
+986
+983
+983
+current number of threads 6
+820
+861
+836
+843
+826
+823
+824
+827
+826
+827
+current number of threads 7
+712
+707
+710
+716
+711
+710
+711
+720
+708
+713
+current number of threads 8
+625
+624
+625
+625
+626
+625
+629
+625
+625
+628
+current number of threads 9
+576
+576
+576
+575
+576
+575
+575
+578
+578
+577
+current number of threads 10
+534
+536
+535
+533
+533
+533
+538
+532
+534
+534
+current number of threads 11
+505
+501
+499
+499
+498
+498
+497
+500
+499
+497
+current number of threads 12
+466
+467
+468
+467
+467
+468
+469
+469
+469
+469
+current number of threads 13
+442
+448
+441
+442
+455
+442
+442
+442
+440
+441
+current number of threads 14
+470
+446
+418
+418
+422
+437
+418
+418
+460
+419
+current number of threads 15
+406
+428
+405
+412
+398
+396
+420
+435
+441
+399
+current number of threads 16
+416
+426
+426
+422
+393
+418
+392
+418
+407
+395
+current number of threads 17
+437
+416
+412
+466
+408
+440
+461
+467
+419
+419
+current number of threads 18
+470
+422
+469
+480
+481
+474
+439
+412
+412
+424
+current number of threads 19
+515
+468
+457
+458
+485
+484
+426
+495
+467
+444
+current number of threads 20
+417
+470
+441
+454
+448
+459
+464
+457
+446
+472
+

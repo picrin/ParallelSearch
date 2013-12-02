@@ -31,6 +31,12 @@ class Node/* implements Comparable<Node>*/{
         children = new ArrayList<Node>(estimatedChildren);
     }
     
+    public Node(long id){
+        this.id = id;
+        visited = new AtomicBoolean(false);
+        children = new ArrayList<Node>();
+    }
+    
     public void connectChild(Node child){
         children.add(child);
     }

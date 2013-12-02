@@ -21,19 +21,21 @@ import java.util.concurrent.Future;
  * all copies or substantial portions of the Software. 
  */
 
-final class ExplorePredecessorsLocal extends GraphExplorator{
+final class ExplorePredecessors extends GraphExplorator{
 
     protected int innerCounter;
     //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
     public static int spawnRate = 200; 
-    protected ExplorePredecessorsLocal(Node start, DataGraph dg){
+    
+    protected ExplorePredecessors(Node start, DataGraph dg){
         super(start, dg);
-
     }
-    public ExplorePredecessorsLocal(ExecutorService executor, Node start, DataGraph dg){
+    
+    public ExplorePredecessors(ExecutorService executor, Node start, DataGraph dg){
         super(executor, start, dg);
         innerCounter = 0;
     }
+    
     @Override
     public void run(){
         Node current = start;
@@ -49,7 +51,7 @@ final class ExplorePredecessorsLocal extends GraphExplorator{
             			for(Node child: node.children){
             				counter.incrementAndGet();
             				//Future<?> future = 
-	                    	executor.execute(new ExplorePredecessorsLocal(child, dg));
+	                    	executor.execute(new ExplorePredecessors(child, dg));
 	                    	/*try{
 	                    		future.get();
 	                    	} catch (Exception e){
