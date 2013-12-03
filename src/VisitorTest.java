@@ -9,7 +9,8 @@ public class VisitorTest {
 
 	@Test
 	public void test(){
-		int size = 20_000_000;
+		
+		int size = 20_000;
 		//ArrayList<Node> nodes = new ArrayList<Node>(size);
 		NonBlockingHashMap<Long, Node> map = new NonBlockingHashMap<Long, Node>(size);
 		for(int i = 0; i < size; i++){

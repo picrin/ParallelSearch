@@ -5,11 +5,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Visitor {
+	// This has been confirmed to scale well.
 	private final ExecutorService executor;
 	private final NonBlockingHashMap<?, Node> map; 
 	private final ArrayList<Integer> leftBoundaries = new ArrayList<Integer>();
 	private final ArrayList<Integer> rightBoundaries = new ArrayList<Integer>();
 	private final int levelOfParallelism;
+	private final DataGraph dg;
 	
 	private static int firstOdd(int number){
 		if (number % 2 == 0){
@@ -18,10 +20,11 @@ public class Visitor {
 
 	}
 	
-	public Visitor(NonBlockingHashMap<?, Node> map, int levelOfParallelism){
+	public Visitor(NonBlockingHashMap<?, Node> map, DataGraph dg, int levelOfParallelism){
 		this.executor = Executors.newFixedThreadPool(levelOfParallelism);
 		this.map = map;
-		this.levelOfParallelism = levelOfParallelism; 
+		this.dg = dg;
+		this.levelOfParallelism = levelOfParallelism;
 	}
 	
 	class Worker implements Runnable{
@@ -39,7 +42,7 @@ public class Visitor {
 			for(int ii = left; ii < right; ii += 2){
 				//System.out.println(i);
 				if (map._kvs[ii] instanceof Node){
-					((Node) map._kvs[ii]).visit();
+					((Node) map._kvs[ii]).reset(dg);
 				}
 			}
 			

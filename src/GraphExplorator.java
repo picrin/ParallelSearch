@@ -18,6 +18,8 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -48,14 +50,25 @@ abstract class GraphExplorator implements Runnable{
     	executor.submit(this);
     }
     
+    public void awaitTermination(){
+    	try {
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+		} catch (InterruptedException e) {e.printStackTrace();}
+    }
+    
     public GraphExplorator(ExecutorService executor, Node start, DataGraph dg){
         this(start, dg);
         GraphExplorator.executor = executor;
     }
     
+    public GraphExplorator(int levelOfParallelism, Node start, DataGraph dg){
+        this(start, dg);
+        GraphExplorator.executor = new ForkJoinPool(levelOfParallelism);
+    }
+    
     protected void whenFinished(){
     	//uncomment this to carry out the measurement
-    	stopTime = System.currentTimeMillis();
+    	//stopTime = System.currentTimeMillis();
         counter.set(1);
         
         //System.out.println("shutdown");

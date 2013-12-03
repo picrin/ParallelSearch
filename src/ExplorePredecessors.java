@@ -23,7 +23,7 @@ import java.util.concurrent.Future;
 
 final class ExplorePredecessors extends GraphExplorator{
 
-    protected int innerCounter;
+    protected int innerCounter = 0;
     //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
     public static int spawnRate = 200; 
     
@@ -33,39 +33,34 @@ final class ExplorePredecessors extends GraphExplorator{
     
     public ExplorePredecessors(ExecutorService executor, Node start, DataGraph dg){
         super(executor, start, dg);
-        innerCounter = 0;
     }
+
+    public ExplorePredecessors(int levelOfParallelism, Node start, DataGraph dg){
+        super(levelOfParallelism, start, dg);
+    }
+
     
     @Override
     public void run(){
         Node current = start;
-        current.visit();
-        stackedNodes.add(current.children);
+        current.mark_predecessor(dg);
+        stackedNodes.add(current.parents);
         while(!stackedNodes.isEmpty()){
-        	//System.out.println("inloop");
         	ArrayList<Node> nodes = stackedNodes.poll();
         	for(Node node: nodes){
-            	if (node.visit()){
+            	if (node.mark_predecessor(dg)){
             		innerCounter += 1;
             		if (innerCounter % spawnRate == spawnRate - 1){
-            			for(Node child: node.children){
+            			for(Node parent: node.parents){
             				counter.incrementAndGet();
-            				//Future<?> future = 
-	                    	executor.execute(new ExplorePredecessors(child, dg));
-	                    	/*try{
-	                    		future.get();
-	                    	} catch (Exception e){
-	                    		e.printStackTrace();
-	                    	}*/
+	                    	executor.execute(new ExplorePredecessors(parent, dg));
             			}
 	            	} else {
-	            		stackedNodes.offer(node.children);
+	            		stackedNodes.offer(node.parents);
             		}
                 }
-              	//System.out.println(stackedNodes.isEmpty());
             }
         }
-        //System.out.println(counter);
         if (counter.decrementAndGet() == 0) this.whenFinished();
     }
 }

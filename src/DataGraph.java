@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 
 
 /*
@@ -19,12 +17,74 @@ import java.util.ArrayList;
  * all copies or substantial portions of the Software. 
  */
 
-public class DataGraph{
-    ArrayList<Node> nodes = new ArrayList<Node>();
-    public DataGraph(){}
+import java.io.Serializable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.PriorityBlockingQueue;
 
+public class DataGraph implements Serializable{
+    private static final long serialVersionUID;
+    static ExecutorService threadPool;
+    static PriorityBlockingQueue<NonBlockingHashMap<Long, Node>> solutions;
+    
+    static {
+    	serialVersionUID = 133713_4045L;
+    	solutions = new PriorityBlockingQueue<NonBlockingHashMap<Long, Node>>();
+    	try{
+    		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
+    	} catch (NullPointerException e){
+            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+        }
+    }
+    
+    NonBlockingHashMap<Long, Node> remainder;
+    NonBlockingHashMap<Long, Node> scc;
+    NonBlockingHashMap<Long, Node> predecessors;
+    NonBlockingHashMap<Long, Node> descendants;
+    
+    public DataGraph(){
+        try{
+            remainder = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
+            scc = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
+            predecessors = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
+            descendants = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
+        } catch (NullPointerException e){
+            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+        }
+    }
+
+    public DataGraph(NonBlockingHashMap<Long, Node> remainder){
+        try{
+            this.remainder = remainder;
+            scc = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
+            predecessors = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
+            descendants = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
+        } catch (NullPointerException e){
+            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+        }
+    }
+    
+    public DataGraph(Iterable<Node> nodes){
+        try {
+            remainder = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
+            for (Node node : nodes){
+                remainder.put(node.id, node);
+            }
+        } catch (NullPointerException e){
+            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+        }
+    }
+    
+    /*public DataGraph(Node[] nodes){
+        remainder = new NodeHashMap(Globals.threads, Globals.hashMapCap, Globals.loadFactor);
+        for (Node node : nodes){
+            remainder.add(node);
+        }
+    }*/
+    
     public void addNode(Node node){
-    	nodes.add(node);
+        node.reset(this);
+        this.remainder.put(node.id, node);
     }
     
 }

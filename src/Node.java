@@ -18,32 +18,84 @@
  */
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Random;
 
 class Node/* implements Comparable<Node>*/{
 	final long id;
-	AtomicBoolean visited;
-	ArrayList<Node> children;
+	final static int childrenNo = 5;
+	boolean predecessor;
+	boolean descendant;
+	DataGraph graph;
+	ArrayList<Node> children = new ArrayList<Node>(childrenNo);
+	ArrayList<Node> parents = new ArrayList<Node>(childrenNo);
 	
-    public Node(long id, int estimatedChildren){
-        this.id = id;
-        visited = new AtomicBoolean(false);
-        children = new ArrayList<Node>(estimatedChildren);
-    }
-    
+	/**
+	 * @param id id == 0 will break your code. You have been warned.
+	 */
     public Node(long id){
         this.id = id;
-        visited = new AtomicBoolean(false);
-        children = new ArrayList<Node>();
-    }
-    
-    public void connectChild(Node child){
-        children.add(child);
-    }
-    
-    public boolean visit(){
-    	return !visited.getAndSet(true);
-    }
+        predecessor = false;
+    	descendant = false;
+    	graph = null;
 
+    }
     
+    /**
+     * This isn't thread safe, use it only once, when you prepare the graph.
+     */
+    public void connectChild(Node child){
+        child.parents.add(this);
+        this.children.add(child);
+    }
+    
+    public synchronized void reset(DataGraph graph){
+        this.graph = graph;
+        predecessor = false;
+        descendant = false;
+        notifyAll();
+        return;
+    }
+    
+    //TODO to achieve 
+    public synchronized boolean mark_predecessor(DataGraph graph){
+        if(predecessor == false && graph == this.graph){
+            predecessor = true;
+            if(descendant == true){
+                graph.scc.put(id, this);
+                graph.descendants.remove(this.id);
+            } else{
+                graph.predecessors.put(id, this);
+                graph.remainder.remove(this.id);
+            }
+            notifyAll();
+            return true;
+        } else{
+            notifyAll();
+            return false;
+        }
+
+    }
+    
+    public synchronized boolean mark_descendant(DataGraph graph){
+        if(descendant == false && graph == this.graph){
+            descendant = true;
+            if(predecessor == true){
+                graph.scc.put(id, this);
+                graph.predecessors.remove(this.id);
+            } else{
+                graph.descendants.put(id, this);            
+                graph.remainder.remove(this.id);
+            }
+            notifyAll();
+            return true;
+        } else{
+            notifyAll();
+            return false;
+        }
+    }
+    
+    /*@Override
+    public int compareTo(Node node) {
+        return Long.compare(this.id, node.id);
+    }*/
 }
