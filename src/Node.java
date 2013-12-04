@@ -93,7 +93,9 @@ class Node/* implements Comparable<Node>*/{
             return false;
         }
     }
-    
+    public String toString(){
+    	return "node" + id;
+    }
     /*@Override
     public int compareTo(Node node) {
         return Long.compare(this.id, node.id);

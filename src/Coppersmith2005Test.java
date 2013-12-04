@@ -341,7 +341,7 @@ public class Coppersmith2005Test{
         
     }*/
 
-// this needs fixing, my new DS has broken it
+// TODO uncomment the implementation of Comparable in Node
     @Test
     /**multiGraph
      * this is a comprehensive, randomized test, which runs two threads, one for predecessors and one for descendants. The testing looks at the following properties:

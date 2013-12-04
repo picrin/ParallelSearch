@@ -21,17 +21,16 @@ class UltimateRecurssion extends RecursiveAction{
 			}
 			else {
 				Node firstCome = dg.remainder.values().iterator().next();
-				System.out.println(firstCome);
-				System.out.println(firstCome.graph);
-				System.out.println(dg);
+				System.out.println("focused node : " + firstCome);
+				//System.out.println(firstCome.graph);
+				//System.out.println(dg);
 				ExplorePredecessors predecessors = new ExplorePredecessors(GraphFactory.locales.threads, firstCome, dg);
 				ExploreDescendants descendants = new ExploreDescendants(GraphFactory.locales.threads, firstCome, dg);
 				
 				predecessors.startExploration();
-				
-				predecessors.awaitTermination();
-				
 				descendants.startExploration();
+
+				predecessors.awaitTermination();				
 				descendants.awaitTermination();
 				ArrayList<UltimateRecurssion> tasks = new ArrayList<UltimateRecurssion>(3);
 				
@@ -40,10 +39,11 @@ class UltimateRecurssion extends RecursiveAction{
 				DataGraph remainingPredecessors = new DataGraph(dg.predecessors);
 				DataGraph remainingDescendants = new DataGraph(dg.descendants);
 				DataGraph remainder = new DataGraph(dg.remainder);
-				
-				System.out.println(dg.predecessors);
-				System.out.println(dg.descendants);
-				System.out.println(dg.remainder);
+
+				System.out.println("scc = " + dg.scc);
+				System.out.println("pred = " + dg.predecessors);
+				System.out.println("desc = " + dg.descendants);
+				System.out.println("rem = " + dg.remainder);
 
 				tasks.add(new UltimateRecurssion(remainingPredecessors));
 				tasks.add(new UltimateRecurssion(remainingDescendants));
