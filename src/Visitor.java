@@ -78,5 +78,6 @@ public class Visitor {
 				e.printStackTrace();
 			}
 		}
+		executor.shutdown();
 	}
 }

@@ -1,10 +1,16 @@
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
 import java.util.LinkedList;
 //import java.util.concurrent.ConcurrentHashMap;
 import org.junit.Assert;
@@ -17,12 +23,93 @@ public class Coppersmith2005Test{
     public static int bigHashMapSize = 85000; // should create 680 MB size object; Will the object creation scale?
     final static int treeElements = 25;
     final static int treeWidth = 2;
-    static ExecutorService threadPool = Executors.newFixedThreadPool(5);
+    //static ExecutorService threadPool = Executors.newFixedThreadPool(5);
 
     @Before
     public void before(){
         GraphFactory.setProblemLocales(new ProblemLocales(10_000, 5, (float) 0.75));
     }
+
+    @Test
+    public void testDG(){
+    	GraphFactory.setProblemLocales(new ProblemLocales(10, 2, 0.75F));
+		ArrayList<DataGraph> arrayList = GraphFactory.makeTwoRandomSparseGraphs(7, 2);
+        DataGraph random1 = arrayList.get(0);
+        DataGraph random2 = arrayList.get(1);
+
+        for(Node node: random1.remainder.values()){
+			System.out.println(node + " children = " + node.children);
+			//System.out.println(node + " parents = " + node.parents);
+		}
+        System.out.println("=========================");
+        /*for(Node node: random2.remainder.values()){
+			System.out.println(node + " children = " + node.children);
+			System.out.println(node + " parents = " + node.parents);
+		}*/
+
+        Assert.assertFalse(random1.remainder.get(1L) == random2.remainder.get(1L));
+        Assert.assertTrue(random1.remainder.get(1L).id == random2.remainder.get(1L).id);
+
+        //ExecutorService executor = new ForkJoinPool(GraphFactory.threadsNoEnd);
+        GraphFactory.setProblemLocales(new ProblemLocales(10, 2, 0.75F));
+        //System.out.println(sanity.remainder);
+        //ExploreDescendants graphExplorator = new ExploreDescendants(2, sanity.remainder.get(5L), sanity);
+        //graphExplorator.startExploration();
+        	//throw new InterruptedException();
+        //graphExplorator.awaitExploration();
+        //System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
+        //System.out.println(graphExplorator.getDG().remainder);
+        //System.out.println(graphExplorator.getDG().descendants);
+		//DFS
+		
+        Node node1 = random1.remainder.get(1L);
+        LinkedList<Node> stack = new LinkedList<Node>();
+
+        stack.push(node1);
+		node1.mark_descendant(random1);
+        while (!stack.isEmpty()){
+			Node current = stack.pop();
+			
+			for(Node child: current.children){
+				if (child.mark_descendant(random1)){
+					stack.push(child);
+				}
+			}
+		}
+
+		ArrayList<Long> DFSVisited = new ArrayList<Long>();
+		
+		for(Node node: random1.descendants.values()){
+        		DFSVisited.add(node.id);
+        }
+		Collections.sort(DFSVisited);
+
+		
+		ArrayList<Long> ParallelSearchVisited = new ArrayList<Long>();
+        
+        ExploreDescendants graphExplorator = new ExploreDescendants(4, random2.remainder.get(1L), random2);
+        
+       	graphExplorator.startExploration();
+       	graphExplorator.awaitExploration();
+	    
+		for(Node node: random2.descendants.values()){
+			ParallelSearchVisited.add(node.id);
+		}
+	    
+        Collections.sort(ParallelSearchVisited);
+
+		System.out.println(DFSVisited);
+        System.out.println(ParallelSearchVisited);
+        
+        		
+		assertTrue(ParallelSearchVisited.size() == DFSVisited.size());
+		for(int i = 0; i < ParallelSearchVisited.size(); i++){
+			//System.out.println(ParallelSearchVisited.get(i) + " " + DFSVisited.get(i));
+			assertTrue(ParallelSearchVisited.get(i).equals(DFSVisited.get(i)));
+		}
+
+    }
+    
     @Test
     public void testVisitor(){
         DataGraph dg = new DataGraph();
@@ -52,10 +139,10 @@ public class Coppersmith2005Test{
         for(Node child: root.children){
         	//System.out.println(child.id);
         }
-        ExploreDescendants magia = new ExploreDescendants(threadPool, root, dg);
+        ExploreDescendants magia = new ExploreDescendants(2, root, dg);
         magia.startExploration();
         //threadPool.
-        magia.awaitTermination();
+        magia.awaitExploration();
 
         long[] array = new long[treeElements];
         int ii = 0;
@@ -72,17 +159,35 @@ public class Coppersmith2005Test{
     }
     
     @Test
-    public void createBigHashMap(){
-        Random generator = new Random();
-        ConcurrentHashMap<Node, Boolean> map = new ConcurrentHashMap<Node, Boolean>(bigHashMapSize);
+    public void testL6(){
+        GraphFactory.setProblemLocales(new ProblemLocales(10, 2, 0.75F));
+		DataGraph sanity = GraphFactory.makeSanityCheckGraph();
+
+        //ExecutorService executor = new ForkJoinPool(GraphFactory.threadsNoEnd);
+        GraphFactory.setProblemLocales(new ProblemLocales(10, 2, 0.75F));
+        ExploreDescendants graphExplorator = new ExploreDescendants(2, sanity.remainder.get(5L), sanity);
+        graphExplorator.startExploration();
+        	//throw new InterruptedException();
+        graphExplorator.awaitExploration();
+        //System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
+        System.out.println(graphExplorator.getDG().remainder);
+        System.out.println(graphExplorator.getDG().descendants);
         
-        for (int i = 0; i <= 1; i++){
-            map.put(new Node(generator.nextLong()), true);
-        }
-        map.keys().nextElement();
-        map.containsKey(7);
+        Assert.assertTrue(graphExplorator.getDG().descendants.get(4L).descendant);
+        Assert.assertTrue(graphExplorator.getDG().descendants.get(5L).descendant);
+        Assert.assertTrue(graphExplorator.getDG().descendants.get(6L).descendant);
+
         
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(1L).id == 1L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(2L).id == 2L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(3L).id == 3L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(7L).id == 7L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(8L).id == 8L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(9L).id == 9L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(10L).id == 10L);
+        Assert.assertTrue(graphExplorator.getDG().remainder.get(11L).id == 11L);
     }
+    
     
     @Test
     public void repeatElements(){
@@ -223,6 +328,43 @@ public class Coppersmith2005Test{
         Arrays.sort(remainder);
         Assert.assertTrue(remainder[0] == 4L);
         Assert.assertTrue(remainder[1] == 5L);
+    }
+    
+    @Test
+    public void KISS_SCCDecomposition(){
+    ForkJoinPool uberPool = new ForkJoinPool(GraphFactory.locales.threads);
+	DataGraph dg = GraphFactory.makeSanityCheckGraph();
+	UltimateRecurssion newRecurssion = new UltimateRecurssion(dg);
+	Future<?> future = uberPool.submit(newRecurssion);
+	try {
+		future.get();
+	} catch (InterruptedException | ExecutionException e) {
+		e.printStackTrace();
+	}
+	for (NonBlockingHashMap map: dg.solutions){
+		if(map.size() == 1){
+			Assert.assertTrue(map.containsKey(3L));
+		} else if(map.size() == 4){
+			Assert.assertTrue(map.containsKey(8L));
+			Assert.assertTrue(map.containsKey(11L));
+			Assert.assertTrue(map.containsKey(9L));
+			Assert.assertTrue(map.containsKey(10L));
+		} else if(map.size() == 3){
+			if (map.containsKey(2L)){
+				Assert.assertTrue(map.containsKey(1L));
+				Assert.assertTrue(map.containsKey(7L));
+			} else if (map.containsKey(6L)){
+				Assert.assertTrue(map.containsKey(5L));
+				Assert.assertTrue(map.containsKey(4L));					
+			} else{
+				System.out.println(map.containsKey(2L));
+				Assert.fail("SCC with unexpected value" + map);
+			}
+		} else {
+			Assert.fail("SCC of unexpected length" + map);
+		}
+		//System.out.println(map);
+	}
     }
     /*@Test
     **

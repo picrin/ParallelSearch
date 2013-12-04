@@ -1,8 +1,8 @@
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
-import java.util.concurrent.RecursiveAction;
+
+import org.junit.Assert;
 
 
 
@@ -14,21 +14,7 @@ public class Main{
 	}
 
 	public static void main(String[] args){
-		DataGraph dg = GraphFactory.makeSanityCheckGraph();
-		/*
-		//System.out.println(dg.remainder.get(1L).id);
-		
-		ExplorePredecessors predecessors = new ExplorePredecessors(GraphFactory.locales.threads, dg.remainder.get(3L), dg);
-		ExploreDescendants descendants = new ExploreDescendants(GraphFactory.locales.threads, dg.remainder.get(3L), dg);
-		
-		predecessors.startExploration();
-		descendants.startExploration();
-		
-		predecessors.awaitTermination();
-		descendants.awaitTermination();
-		
-		System.out.println(dg.scc);*/
-		//Future<?>
+		DataGraph dg = GraphFactory.makeTwoRandomSparseGraphs(10000, 3).get(0);
 		UltimateRecurssion newRecurssion = new UltimateRecurssion(dg);
 		Future<?> future = uberPool.submit(newRecurssion);
 		try {

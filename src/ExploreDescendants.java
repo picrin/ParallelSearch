@@ -1,7 +1,8 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 /*
  * The MIT License (MIT)
@@ -20,83 +21,62 @@ import java.util.concurrent.TimeUnit;
  * all copies or substantial portions of the Software. 
  */
 
-final class ExploreDescendants extends GraphExplorator{
+final class ExploreDescendants implements Runnable{
+	LinkedList<ArrayList<Node>> stackedNodes;
+	GraphExplorator explorator;
 	
-	private static ExecutorService executor;
-    protected int innerCounter;
-    //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
-    public static int spawnRate = 200; 
+	protected ArrayList<Node> startChildren;
     
-    protected ExploreDescendants(Node start, DataGraph dg){
-        super(start, dg);
-    }
+	protected int innerCounter;
     
-    //TODO this HAS TO disappear, because it's WRONG.
-    public ExploreDescendants(ExecutorService executor, Node start, DataGraph dg){
-        super(executor, start, dg);
-        innerCounter = 0;
+	//TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
+    public static int spawnRate = 2;//00; 
+    
+    protected ExploreDescendants(ArrayList<Node> startChildren, GraphExplorator explorator){
+    	this.explorator = explorator;
+    	//System.out.println("being called");
+    	stackedNodes = new LinkedList<ArrayList<Node>>();
+    	this.startChildren = startChildren;
     }
     
     public ExploreDescendants(int levelOfParallelism, Node start, DataGraph dg) {
-    	super(start, dg);
-    	ExploreDescendants.executor = new ForkJoinPool(levelOfParallelism);
-		// TODO Auto-generated constructor stub
+    	this(start.children, new GraphExplorator(levelOfParallelism, dg));
+    	start.mark_descendant(dg);
 	}
-    protected void whenFinished(){
-    	//uncomment this to carry out the measurement
-    	//stopTime = System.currentTimeMillis();
-        counter.set(1);
-        
-        //System.out.println("shutdown");
-    	executor.shutdown();
-        //mainThread.interrupt();
-    }
+
     public void startExploration(){
-    	System.out.println("exploring dg");
-    	counter.set(1);
-    	executor.submit(this);
+    	explorator.startExploration(this);
     }
     
-    public void awaitTermination(){
-    	try {
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-		} catch (InterruptedException e) {e.printStackTrace();}
+    public void awaitExploration(){
+    	explorator.awaitTermination();
+    }
+    
+    public DataGraph getDG(){
+    	return explorator.dg;
     }
     
 	@Override
     public void run(){
     	try{
-	        Node current = start;
-	        current.mark_descendant(dg);
-	        stackedNodes.add(current.children);
+	        stackedNodes.add(startChildren);
 	        while(!stackedNodes.isEmpty()){
-	        	//System.out.println("inloop");
 	        	ArrayList<Node> nodes = stackedNodes.poll();
 	        	for(Node node: nodes){
-	        		boolean markedSuccess = node.mark_descendant(dg);
-	        		//System.out.println(markedSuccess);
+	        		boolean markedSuccess = node.mark_descendant(explorator.dg);
 	        		if (markedSuccess){
 	            		innerCounter += 1;
 	            		if (innerCounter % spawnRate == spawnRate - 1){
-	            			for(Node child: node.children){
-	            				counter.incrementAndGet();
-	            				//Future<?> future = 
-		                    	executor.execute(new ExploreDescendants(child, dg));
-		                    	/*try{
-		                    		future.get();
-		                    	} catch (Exception e){
-		                    		e.printStackTrace();
-		                    	}*/
-	            			}
+	            			explorator.counter.incrementAndGet();
+	            			//System.out.println(node.children);
+	            			explorator.executor.execute(new ExploreDescendants(node.children, explorator));
 		            	} else {
 		            		stackedNodes.offer(node.children);
 	            		}
 	                }
-	              	//System.out.println(stackedNodes.isEmpty());
 	            }
 	        }
-	        //System.out.println(counter);
-	        if (counter.decrementAndGet() == 0) this.whenFinished();
+	        if (explorator.counter.decrementAndGet() == 0) explorator.whenFinished();
     	} catch (Exception e){
     		e.printStackTrace();
     	}

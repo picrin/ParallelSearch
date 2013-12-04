@@ -20,7 +20,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-class Node/* implements Comparable<Node>*/{
+class Node implements Comparable<Node>{
 	final long id;
 	final static int childrenNo = 5;
 	boolean predecessor;
@@ -96,8 +96,8 @@ class Node/* implements Comparable<Node>*/{
     public String toString(){
     	return "node" + id;
     }
-    /*@Override
+    @Override
     public int compareTo(Node node) {
         return Long.compare(this.id, node.id);
-    }*/
+    }
 }

@@ -15,46 +15,37 @@
  * all copies or substantial portions of the Software. 
  */
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-abstract class GraphExplorator implements Runnable{
-	protected LinkedList<ArrayList<Node>> stackedNodes;
-	static public Thread mainThread;
-    static protected AtomicInteger counter = new AtomicInteger(1);
-    //static protected ExecutorService executor;
-    static public long startTime;
-    static public long stopTime;
-    final protected Node start;
-    final protected DataGraph dg;
-
-    protected GraphExplorator(Node start, DataGraph dg){
-        this.start = start;
+class GraphExplorator{
+    AtomicInteger counter = new AtomicInteger(1);
+    ExecutorService executor;
+    DataGraph dg;
+            
+    public void startExploration(Runnable explorator){
+    	executor.submit(explorator);
+    }    
+    
+    public void awaitTermination(){
+    	try {
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+		} catch (InterruptedException e) {e.printStackTrace();}
+    }
+        
+    public GraphExplorator(int levelOfParallelism, DataGraph dg){
+    	counter.set(1);
+    	//System.out.println("new forkjoin pool");
+        executor = new ForkJoinPool(levelOfParallelism);
         this.dg = dg;
-        stackedNodes = new LinkedList<ArrayList<Node>>();
     }
     
-    /*public void startWithTimer(){
-    	System.gc();
-    	startTime = System.currentTimeMillis();
-    	startExploration();
-    }*/
-    
-
-    
-
-    
-    public GraphExplorator(ExecutorService executor, Node start, DataGraph dg){
-        this(start, dg);
-        //GraphExplorator.executor = executor;
+    protected void whenFinished(){
+    	//System.out.println(this + " finished");
+    	executor.shutdown();
     }
-    
-    @Override
-    abstract public void run();
-    
+
 }

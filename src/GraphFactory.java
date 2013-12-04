@@ -1,5 +1,6 @@
 
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -30,11 +31,42 @@ public class GraphFactory {
             for(int ii = 0; ii < size; ii++){
                 if(generator.nextBoolean()){
                     nodes[i].connectChild(nodes[ii]);
-                    System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);
+                    //System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);
                 }
             }
         }
         return dg; 
+    }
+
+    public static ArrayList<DataGraph> makeTwoRandomSparseGraphs(int size, int noChildren){
+        Random generator = new Random();
+        DataGraph dg1 = new DataGraph();
+        DataGraph dg2 = new DataGraph();
+        Node[] nodes1 = new Node[size];
+        Node[] nodes2 = new Node[size];
+
+        for(int i = 0; i < size; i++){
+            Node newNode1 = new Node(i + 1);
+            Node newNode2 = new Node(i + 1);
+            nodes1[i] = newNode1;
+            nodes2[i] = newNode2;
+            dg1.addNode(newNode1);
+            dg2.addNode(newNode2);
+        }
+        
+        for(int i = 0; i < size; i++){
+            for(int ii = 0; ii < noChildren; ii++){
+            	int nextInt = generator.nextInt(size);
+                nodes1[i].connectChild(nodes1[nextInt]);
+                nodes2[i].connectChild(nodes2[nextInt]);
+                //System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);
+                
+            }
+        }
+        ArrayList<DataGraph> arrayList = new ArrayList<DataGraph>();
+        arrayList.add(dg1);
+        arrayList.add(dg2);
+        return arrayList;
     }
     public static DataGraph makeSanityCheckGraph(){
         DataGraph dg = new DataGraph();

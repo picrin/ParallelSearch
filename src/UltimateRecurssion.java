@@ -7,7 +7,7 @@ class UltimateRecurssion extends RecursiveAction{
 	public UltimateRecurssion(DataGraph dg){
 		this.dg = dg;
 	}
-		@Override
+	@Override
 	protected void compute(){
 		try{
 			if(dg == null) return;
@@ -20,8 +20,12 @@ class UltimateRecurssion extends RecursiveAction{
 				return;
 			}
 			else {
+				
+				Visitor visitor = new Visitor(dg.remainder, dg, GraphFactory.locales.threads);
+				visitor.visitAllInParallel();
+				
 				Node firstCome = dg.remainder.values().iterator().next();
-				System.out.println("focused node : " + firstCome);
+				//System.out.println("focused node : " + firstCome);
 				//System.out.println(firstCome.graph);
 				//System.out.println(dg);
 				ExplorePredecessors predecessors = new ExplorePredecessors(GraphFactory.locales.threads, firstCome, dg);
@@ -29,9 +33,9 @@ class UltimateRecurssion extends RecursiveAction{
 				
 				predecessors.startExploration();
 				descendants.startExploration();
-
-				predecessors.awaitTermination();				
-				descendants.awaitTermination();
+				
+				predecessors.awaitExploration();				
+				descendants.awaitExploration();
 				ArrayList<UltimateRecurssion> tasks = new ArrayList<UltimateRecurssion>(3);
 				
 				dg.solutions.add(dg.scc);
@@ -39,12 +43,11 @@ class UltimateRecurssion extends RecursiveAction{
 				DataGraph remainingPredecessors = new DataGraph(dg.predecessors);
 				DataGraph remainingDescendants = new DataGraph(dg.descendants);
 				DataGraph remainder = new DataGraph(dg.remainder);
-
-				System.out.println("scc = " + dg.scc);
-				System.out.println("pred = " + dg.predecessors);
-				System.out.println("desc = " + dg.descendants);
-				System.out.println("rem = " + dg.remainder);
-
+				
+				//System.out.println("scc = " + dg.scc);
+				//System.out.println("pred = " + dg.predecessors);
+				//System.out.println("desc = " + dg.descendants);
+				//System.out.println("rem = " + dg.remainder);
 				tasks.add(new UltimateRecurssion(remainingPredecessors));
 				tasks.add(new UltimateRecurssion(remainingDescendants));
 				tasks.add(new UltimateRecurssion(remainder));

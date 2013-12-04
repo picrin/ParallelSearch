@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /*
  * The MIT License (MIT)
@@ -23,70 +21,64 @@ import java.util.concurrent.TimeUnit;
  * all copies or substantial portions of the Software. 
  */
 
-final class ExplorePredecessors extends GraphExplorator{
+final class ExplorePredecessors implements Runnable{
+	LinkedList<ArrayList<Node>> stackedNodes;
+	GraphExplorator explorator;
 	
-	private static ExecutorService executor;
-    protected int innerCounter = 0;
-    //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
-    public static int spawnRate = 200; 
+	protected ArrayList<Node> startParents;
     
-    protected ExplorePredecessors(Node start, DataGraph dg){
-        super(start, dg);
+	protected int innerCounter;
+    
+	//TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
+    public static int spawnRate = 2;//00; 
+    
+    protected ExplorePredecessors(ArrayList<Node> startParents, GraphExplorator explorator){
+    	//System.out.println("being called");
+    	this.explorator = explorator;
+    	stackedNodes = new LinkedList<ArrayList<Node>>();
+    	this.startParents = startParents;
     }
     
-    public ExplorePredecessors(ExecutorService executor, Node start, DataGraph dg){
-        super(executor, start, dg);
-    }
-
-    public ExplorePredecessors(int levelOfParallelism, Node start, DataGraph dg){
-        super( start, dg);
-        ExplorePredecessors.executor = new ForkJoinPool(levelOfParallelism);
-    }
+    public ExplorePredecessors(int levelOfParallelism, Node start, DataGraph dg) {
+    	this(start.parents, new GraphExplorator(levelOfParallelism, dg));
+    	start.mark_predecessor(dg);
+	}
 
     public void startExploration(){
-    	System.out.println("exploring dg");
-    	counter.set(1);
-    	executor.submit(this);
+    	explorator.startExploration(this);
     }
     
-    public void awaitTermination(){
-    	try {
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-		} catch (InterruptedException e) {e.printStackTrace();}
+    public void awaitExploration(){
+    	explorator.awaitTermination();
     }
     
-    protected void whenFinished(){
-    	//uncomment this to carry out the measurement
-    	//stopTime = System.currentTimeMillis();
-        counter.set(1);
-        
-        //System.out.println("shutdown");
-    	ExplorePredecessors.executor.shutdown();
-        //mainThread.interrupt();
+    public DataGraph getDG(){
+    	return explorator.dg;
     }
     
-    @Override
+	@Override
     public void run(){
-        Node current = start;
-        current.mark_predecessor(dg);
-        stackedNodes.add(current.parents);
-        while(!stackedNodes.isEmpty()){
-        	ArrayList<Node> nodes = stackedNodes.poll();
-        	for(Node node: nodes){
-            	if (node.mark_predecessor(dg)){
-            		innerCounter += 1;
-            		if (innerCounter % spawnRate == spawnRate - 1){
-            			for(Node parent: node.parents){
-            				counter.incrementAndGet();
-	                    	executor.execute(new ExplorePredecessors(parent, dg));
-            			}
-	            	} else {
-	            		stackedNodes.offer(node.parents);
-            		}
-                }
-            }
-        }
-        if (counter.decrementAndGet() == 0) this.whenFinished();
+    	try{
+	        stackedNodes.add(startParents);
+	        while(!stackedNodes.isEmpty()){
+	        	ArrayList<Node> nodes = stackedNodes.poll();
+	        	for(Node node: nodes){
+	        		boolean markedSuccess = node.mark_predecessor(explorator.dg);
+	        		if (markedSuccess){
+	            		innerCounter += 1;
+	            		if (innerCounter % spawnRate == spawnRate - 1){
+	            			explorator.counter.incrementAndGet();
+	            			//System.out.println(explorator.executor.isShutdown());
+	            			explorator.executor.execute(new ExplorePredecessors(node.parents, explorator));
+		            	} else {
+		            		stackedNodes.offer(node.parents);
+	            		}
+	                }
+	            }
+	        }
+	        if (explorator.counter.decrementAndGet() == 0) explorator.whenFinished();
+    	} catch (Exception e){
+    		e.printStackTrace();
+    	}
     }
 }
-
