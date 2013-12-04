@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /*
  * The MIT License (MIT)
@@ -22,7 +24,8 @@ import java.util.concurrent.Future;
  */
 
 final class ExplorePredecessors extends GraphExplorator{
-
+	
+	private static ExecutorService executor;
     protected int innerCounter = 0;
     //TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
     public static int spawnRate = 200; 
@@ -36,9 +39,31 @@ final class ExplorePredecessors extends GraphExplorator{
     }
 
     public ExplorePredecessors(int levelOfParallelism, Node start, DataGraph dg){
-        super(levelOfParallelism, start, dg);
+        super( start, dg);
+        ExplorePredecessors.executor = new ForkJoinPool(levelOfParallelism);
     }
 
+    public void startExploration(){
+    	System.out.println("exploring dg");
+    	counter.set(1);
+    	executor.submit(this);
+    }
+    
+    public void awaitTermination(){
+    	try {
+			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+		} catch (InterruptedException e) {e.printStackTrace();}
+    }
+    
+    protected void whenFinished(){
+    	//uncomment this to carry out the measurement
+    	//stopTime = System.currentTimeMillis();
+        counter.set(1);
+        
+        //System.out.println("shutdown");
+    	ExplorePredecessors.executor.shutdown();
+        //mainThread.interrupt();
+    }
     
     @Override
     public void run(){

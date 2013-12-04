@@ -27,7 +27,7 @@ abstract class GraphExplorator implements Runnable{
 	protected LinkedList<ArrayList<Node>> stackedNodes;
 	static public Thread mainThread;
     static protected AtomicInteger counter = new AtomicInteger(1);
-    static protected ExecutorService executor;
+    //static protected ExecutorService executor;
     static public long startTime;
     static public long stopTime;
     final protected Node start;
@@ -39,42 +39,21 @@ abstract class GraphExplorator implements Runnable{
         stackedNodes = new LinkedList<ArrayList<Node>>();
     }
     
-    public void startWithTimer(){
+    /*public void startWithTimer(){
     	System.gc();
     	startTime = System.currentTimeMillis();
     	startExploration();
-    }
+    }*/
     
-    public void startExploration(){
-    	counter.set(1);
-    	executor.submit(this);
-    }
+
     
-    public void awaitTermination(){
-    	try {
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-		} catch (InterruptedException e) {e.printStackTrace();}
-    }
+
     
     public GraphExplorator(ExecutorService executor, Node start, DataGraph dg){
         this(start, dg);
-        GraphExplorator.executor = executor;
+        //GraphExplorator.executor = executor;
     }
     
-    public GraphExplorator(int levelOfParallelism, Node start, DataGraph dg){
-        this(start, dg);
-        GraphExplorator.executor = new ForkJoinPool(levelOfParallelism);
-    }
-    
-    protected void whenFinished(){
-    	//uncomment this to carry out the measurement
-    	//stopTime = System.currentTimeMillis();
-        counter.set(1);
-        
-        //System.out.println("shutdown");
-    	executor.shutdown();
-        //mainThread.interrupt();
-    }
     @Override
     abstract public void run();
     

@@ -18,18 +18,18 @@
  */
 
 import java.io.Serializable;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.PriorityBlockingQueue;
 
 public class DataGraph implements Serializable{
     private static final long serialVersionUID;
     static ExecutorService threadPool;
-    static PriorityBlockingQueue<NonBlockingHashMap<Long, Node>> solutions;
+    static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
     
     static {
     	serialVersionUID = 133713_4045L;
-    	solutions = new PriorityBlockingQueue<NonBlockingHashMap<Long, Node>>();
+    	solutions = new ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>>();
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
     	} catch (NullPointerException e){
