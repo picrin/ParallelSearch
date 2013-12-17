@@ -1,7 +1,8 @@
 \documentclass{article}
 \usepackage{biblatex}
-\bibliography{db}{}
+\usepackage{hyperref}
 
+\bibliography{db}{}
 \setlength{\emergencystretch}{3em}
 
 \title{A parallel implementation of Strongly Connected Divide and Conquer.}
@@ -24,7 +25,7 @@ Descendants and predecessors are explored using reachability analysis. The algor
 The stage of recursive invocations is optimised to allow recursion only on sufficiently large subgraphs. Small subgraphs are processed using Tarjan's \cite{tarjan72} algorithm. This lets us avoid the cost of recursion if it outweights the benefit of parallelism. The size we consider sufficiently large is again a constant value determined experimentally.
 
 \par
-Such optimised SCDC is tested against our implementations of single-threaded Tarjan's \cite{tarjan72} and Kosaraju-Sharir's \cite{sharir81} algorithms, and unoptimised multi-threaded SCDC \cite{fleischer00} on various classes of random and real world graphs. The code is released under open-source MIT licence and hosted on github.com/picrin/SCDC. The testing is carried out on Amazon Web Services (AWS) Elastic Cloud (EC2) virtual machines with up to 32 virtual CPUs. The access to EC2 has been kindly funded by Amazon in Education.
+Performance of such optimised SCDC is compared with our implementations of single-threaded Tarjan's \cite{tarjan72} and Kosaraju-Sharir's \cite{sharir81} algorithms, and unoptimised multi-threaded SCDC \cite{fleischer00} on various classes of random and real world graphs. We discuss the impact of our optimisations and show the direction of further improvements. The code is released under open-source MIT licence and hosted on \href{http://github.com/picrin/SCDC}{github.com/picrin/SCDC}. The testing is carried out on Amazon Web Services (AWS) Elastic Cloud (EC2) virtual machines with up to 32 virtual CPUs. The access to EC2 has been kindly funded by Amazon in Education.
 
 \printbibliography
 
