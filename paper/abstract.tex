@@ -1,12 +1,17 @@
 \documentclass{article}
 \usepackage{biblatex}
 \usepackage{hyperref}
+\usepackage{authblk}
 
 \bibliography{db}{}
 \setlength{\emergencystretch}{3em}
 
 \title{A parallel implementation of Strongly Connected Divide and Conquer.}
-\author{Adam Kurkiewicz, Iva Babukova\\ School of Mathemathics\\ University of Glasgow}
+\author[1]{Adam Kurkiewicz\thanks{Adam@Kurkiewicz.pl}}
+\author[1]{Iva Babukova\thanks{ibabukova@gmail.com}}
+\author[2]{Huw Evans}
+\affil[1]{School of Mathematics \& Statistics, School of Computing Science, The University of Glasgow}
+\affil[2]{SAS Institute Inc}
 \date{}
 
 \begin{document}
@@ -16,17 +21,16 @@
 \section{Abstract}
 
 \par
-In this work we present a parallel implementation of Strongly Connected Divide and Conquer (SCDC), an algorithm described by \textcite{fleischer00}, which can be used to identify strongly connected components of arbitrary graphs. Our implementation is written in Java and achieves parallelism in both stages of the algorithm: the stage of the random vertex's descendants and predecessors search; and the stage of recursive invocations.
+This work presents a parallel Java implementation of the Strongly Connected Divide and Conquer (SCDC) algorithm \cite{fleischer00}, which is used to identify strongly connected components of a directed graph. Our main goal is to achieve a good level of performance and scalability. Both stages of the algorithm -- the search of random vertex descendants and predecessors, and subsequent recursive invocation -- are parallelised.
 
 \par
-Descendants and predecessors are explored using reachability analysis. The algorithm used is a parallel non-deterministic search algorithm, optimised to use a custom stack of vertices as opposed to a stack of recursive calls, which reduces its space complexity. The algorithm accepts as a parameter a granularity level, which is further set experimentally to provide best scalability for multi-core machines the algorithm is tested on.
+Descendants and predecessors are explored using reachability analysis. The algorithm used is a parallel non-deterministic search, optimised to use a custom stack of vertices as opposed to a stack of recursive calls, which reduces its space complexity. The algorithm accepts as a parameter a granularity level, which is set experimentally to provide different scalability characteristics for multi-core machines.
 
 \par
-The stage of recursive invocations is optimised to allow recursion only on sufficiently large subgraphs. Small subgraphs are processed using Tarjan's \cite{tarjan72} algorithm. This lets us avoid the cost of recursion if it outweights the benefit of parallelism. The size we consider sufficiently large is again a constant value determined experimentally.
+Recursive invocation is optimised to allow recursion only on sufficiently large subgraphs. For small subgraphs we are using Tarjan's \cite{tarjan72} algorithm, which we show gives performance gain. The size we consider sufficiently large is tuned experimentally.
 
 \par
-Performance of such optimised SCDC is compared with our implementations of single-threaded Tarjan's \cite{tarjan72} and Kosaraju-Sharir's \cite{sharir81} algorithms, and unoptimised multi-threaded SCDC \cite{fleischer00} on various classes of random and real world graphs. We discuss the impact of our optimisations and show the direction of further improvements. The code is released under open-source MIT licence and hosted on \href{http://github.com/picrin/SCDC}{github.com/picrin/SCDC}. The testing is carried out on Amazon Web Services (AWS) Elastic Cloud (EC2) virtual machines with up to 32 virtual CPUs. The access to EC2 has been kindly funded by Amazon in Education.
-
+Performance of such optimised SCDC is compared with our implementations of single-threaded Tarjan's \cite{tarjan72} and Kosaraju-Sharir's \cite{sharir81} algorithms, and unoptimised multi-threaded SCDC \cite{fleischer00} on various classes of random and real world graphs. We discuss the impact of our optimisations and show the direction for further improvements.
 \printbibliography
 
 \end{document}
