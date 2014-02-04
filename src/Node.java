@@ -29,9 +29,6 @@ class Node implements Comparable<Node>{
 	ArrayList<Node> children = new ArrayList<Node>(childrenNo);
 	ArrayList<Node> parents = new ArrayList<Node>(childrenNo);
 	
-	/**
-	 * @param id id == 0 will break your code. You have been warned.
-	 */
     public Node(long id){
         this.id = id;
         predecessor = false;

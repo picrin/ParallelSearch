@@ -93,7 +93,7 @@ public class Tests {
         	//throw new InterruptedException();
         graphExplorator.awaitExploration();
         //System.out.println("Recurssion on runnables finished" + (GraphExplorator.stopTime - GraphExplorator.startTime) + "millis after execution");
-        System.out.println()
+        System.out.println();
         /*Assert.assertTrue(sanity.nodes.get(3).visited.get());
         Assert.assertTrue(sanity.nodes.get(4).visited.get());
         Assert.assertTrue(sanity.nodes.get(5).visited.get());
