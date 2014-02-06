@@ -22,13 +22,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
-public class DataGraph implements Serializable{
+public class DataGraph implements Serializable, SCCGraph<Node>{
     private static final long serialVersionUID;
     static ExecutorService threadPool;
     static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
     
     static {
-    	serialVersionUID = 133713_4045L;
+    	serialVersionUID = 31337_4045L;
     	solutions = new ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>>();
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
@@ -81,10 +81,25 @@ public class DataGraph implements Serializable{
             remainder.add(node);
         }
     }*/
-    
+	@Override    
     public void addNode(Node node){
-        node.reset(this);
+        node.setGraph(this);
         this.remainder.put(node.id, node);
     }
-    
+
+	@Override
+	public ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> getSolutions() {
+		return solutions;
+	}
+
+	@Override
+	public void reportSolution(NonBlockingHashMap<Long, Node> solution) {
+		solutions.add(solution);
+	}
+
+	@Override
+	public int compareTo(SCCGraph<DeNode<?>> o) {
+		return -1;
+	}
+
 }

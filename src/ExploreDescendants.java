@@ -41,7 +41,7 @@ final class ExploreDescendants implements Runnable{
     
     public ExploreDescendants(int levelOfParallelism, Node start, DataGraph dg) {
     	this(start.children, new GraphExplorator(levelOfParallelism, dg));
-    	start.mark_descendant(dg);
+    	start.markDescendant(dg);
 	}
 
     public void startExploration(){
@@ -63,7 +63,7 @@ final class ExploreDescendants implements Runnable{
 	        while(!stackedNodes.isEmpty()){
 	        	ArrayList<Node> nodes = stackedNodes.poll();
 	        	for(Node node: nodes){
-	        		boolean markedSuccess = node.mark_descendant(explorator.dg);
+	        		boolean markedSuccess = node.markDescendant(explorator.dg);
 	        		if (markedSuccess){
 	            		innerCounter += 1;
 	            		if (innerCounter % spawnRate == spawnRate - 1){

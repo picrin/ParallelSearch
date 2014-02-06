@@ -42,7 +42,7 @@ public class Visitor {
 			for(int ii = left; ii < right; ii += 2){
 				//System.out.println(i);
 				if (map._kvs[ii] instanceof Node){
-					((Node) map._kvs[ii]).reset(dg);
+					((Node) map._kvs[ii]).setGraph(dg);
 				}
 			}
 			

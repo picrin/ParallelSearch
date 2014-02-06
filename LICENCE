@@ -1,3 +1,6 @@
+Some parts of this software are in public domain (Click Cliff's lock-free
+hash map). Everything else is distributed under MIT Licence:
+
 The MIT License (MIT)
 
 Copyright (c) 2013 Adam Kurkiewicz

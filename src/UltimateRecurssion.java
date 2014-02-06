@@ -38,7 +38,7 @@ class UltimateRecurssion extends RecursiveAction{
 				descendants.awaitExploration();
 				ArrayList<UltimateRecurssion> tasks = new ArrayList<UltimateRecurssion>(3);
 				
-				dg.solutions.add(dg.scc);
+				DataGraph.solutions.add(dg.scc);
 				
 				DataGraph remainingPredecessors = new DataGraph(dg.predecessors);
 				DataGraph remainingDescendants = new DataGraph(dg.descendants);

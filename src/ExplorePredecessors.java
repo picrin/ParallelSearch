@@ -41,7 +41,7 @@ final class ExplorePredecessors implements Runnable{
     
     public ExplorePredecessors(int levelOfParallelism, Node start, DataGraph dg) {
     	this(start.parents, new GraphExplorator(levelOfParallelism, dg));
-    	start.mark_predecessor(dg);
+    	start.markPredecessor(dg);
 	}
 
     public void startExploration(){
@@ -63,7 +63,7 @@ final class ExplorePredecessors implements Runnable{
 	        while(!stackedNodes.isEmpty()){
 	        	ArrayList<Node> nodes = stackedNodes.poll();
 	        	for(Node node: nodes){
-	        		boolean markedSuccess = node.mark_predecessor(explorator.dg);
+	        		boolean markedSuccess = node.markPredecessor(explorator.dg);
 	        		if (markedSuccess){
 	            		innerCounter += 1;
 	            		if (innerCounter % spawnRate == spawnRate - 1){

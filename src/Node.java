@@ -20,7 +20,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-class Node implements Comparable<Node>{
+class Node implements DeNode<Node>{
 	final long id;
 	final static int childrenNo = 5;
 	boolean predecessor;
@@ -40,12 +40,21 @@ class Node implements Comparable<Node>{
     /**
      * This isn't thread safe, use it only once, when you prepare the graph.
      */
+    @Override
     public void connectChild(Node child){
         child.parents.add(this);
         this.children.add(child);
     }
     
-    public synchronized void reset(DataGraph graph){
+    /**
+     * Setting a graph also resets information about all previous details
+     * of whether the node belonged to a set of predecessors or a set of
+     * descendants of a previously inspected node.
+     * @param graph
+     */
+    
+    @Override
+    public synchronized void setGraph(DataGraph graph){
         this.graph = graph;
         predecessor = false;
         descendant = false;
@@ -53,8 +62,17 @@ class Node implements Comparable<Node>{
         return;
     }
     
-    //TODO to achieve 
-    public synchronized boolean mark_predecessor(DataGraph graph){
+    @Override
+    public DataGraph getGraph(){
+    	return this.graph;
+    }
+    
+    @Override
+    public Long getID(){
+    	return this.id;
+    }
+    
+    public synchronized boolean markPredecessor(DataGraph graph){
         if(predecessor == false && graph == this.graph){
             predecessor = true;
             if(descendant == true){
@@ -73,7 +91,8 @@ class Node implements Comparable<Node>{
 
     }
     
-    public synchronized boolean mark_descendant(DataGraph graph){
+
+    public synchronized boolean markDescendant(DataGraph graph){
         if(descendant == false && graph == this.graph){
             descendant = true;
             if(predecessor == true){
@@ -90,11 +109,27 @@ class Node implements Comparable<Node>{
             return false;
         }
     }
+    
+    @Override
     public String toString(){
     	return "node" + id;
     }
+    
     @Override
-    public int compareTo(Node node) {
-        return Long.compare(this.id, node.id);
+    public int compareTo(DeNode<?> node) {
+        return Long.compare(this.id, node.getID());
     }
+
+	@Override
+	public ArrayList<Node> getChildren() {
+		// TODO Auto-generated method stub
+		return this.children;
+	}
+
+	@Override
+	public ArrayList<Node> getParents() {
+		// TODO Auto-generated method stub
+		return this.parents;
+	}
+
 }

@@ -1,4 +1,11 @@
-mport java.util.concurrent.ExecutionException;
+/*
+ * I'm well aware how much of a mess this program is. That's what tends
+ * to happen with complicated programs. If you're trying to grok it,
+ * please drop me an e-mail at adam@kurkiewicz.pl, I'll be happy to give
+ * you a few pointers.
+ * Adam
+ */
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 

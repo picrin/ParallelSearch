@@ -66,12 +66,12 @@ public class Coppersmith2005Test{
         LinkedList<Node> stack = new LinkedList<Node>();
 
         stack.push(node1);
-		node1.mark_descendant(random1);
+		node1.markDescendant(random1);
         while (!stack.isEmpty()){
 			Node current = stack.pop();
 			
 			for(Node child: current.children){
-				if (child.mark_descendant(random1)){
+				if (child.markDescendant(random1)){
 					stack.push(child);
 				}
 			}
@@ -133,7 +133,7 @@ public class Coppersmith2005Test{
         }
 
         for(Node element: all){
-            element.reset(dg);
+            element.setGraph(dg);
             
         }
         for(Node child: root.children){
@@ -218,9 +218,9 @@ public class Coppersmith2005Test{
                     //System.out.print(node.id);
                     
                     if(operation[track][i]){
-                        node.mark_predecessor(dg);
+                        node.markPredecessor(dg);
                     } else {
-                        node.mark_descendant(dg);
+                        node.markDescendant(dg);
                     }
                             
                 }                
@@ -278,11 +278,11 @@ public class Coppersmith2005Test{
         dg.addNode(n4);
         dg.addNode(n5);
         
-        n1.mark_predecessor(dg);
-        n2.mark_predecessor(dg);
-        n3.mark_descendant(dg);
-        n2.mark_predecessor(dg);
-        n1.mark_descendant(dg);
+        n1.markPredecessor(dg);
+        n2.markPredecessor(dg);
+        n3.markDescendant(dg);
+        n2.markPredecessor(dg);
+        n1.markDescendant(dg);
         
         Node[] scc = new Node[1];
         int i = 0;
@@ -531,7 +531,7 @@ public class Coppersmith2005Test{
                 new Runnable(){
                     public void run(){
                         for(Node node: pullPre){
-                            node.mark_predecessor(multiGraph);
+                            node.markPredecessor(multiGraph);
                         }
                     }
                 }
@@ -541,7 +541,7 @@ public class Coppersmith2005Test{
                 new Runnable(){
                     public void run(){
                         for(Node node: pullDes){
-                            node.mark_descendant(multiGraph);
+                            node.markDescendant(multiGraph);
                         }
                     }
                 }    
