@@ -17,18 +17,18 @@
  * all copies or substantial portions of the Software. 
  */
 
-import java.io.Serializable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
+//import java.io.Serializable;
 
-public class DataGraph implements Serializable, SCCGraph<Node>{
-    private static final long serialVersionUID;
+public class DataGraph implements SCCGraph<Node>{
+    //private static final long serialVersionUID;
     static ExecutorService threadPool;
     static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
     
     static {
-    	serialVersionUID = 31337_4045L;
+    	//serialVersionUID = 31337_4045L;
     	solutions = new ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>>();
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
@@ -98,7 +98,7 @@ public class DataGraph implements Serializable, SCCGraph<Node>{
 	}
 
 	@Override
-	public int compareTo(SCCGraph<DeNode<?>> o) {
+	public int compareTo(SCCGraph<DeNode<?>> otherGraph) {
 		return -1;
 	}
 
