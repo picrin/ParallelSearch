@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class GraphFactory {
+public class GraphFactory<NodeType extends DeNode<?, ?>, GraphType extends SCCGraph<?>> {
     private GraphFactory(){};
     
     static ProblemLocales locales;
@@ -115,4 +115,53 @@ public class GraphFactory {
         n11.connectChild(n9);
         return dg;
     }
+
+    public static TarjansGraph makeSanityCheckGraphTarjan(){
+    	TarjansGraph dg = new TarjansGraph();
+        TarjansNode n1 = new TarjansNode(1);
+        TarjansNode n2 = new TarjansNode(2);
+        TarjansNode n3 = new TarjansNode(3);
+        TarjansNode n4 = new TarjansNode(4);
+        TarjansNode n5 = new TarjansNode(5);
+        TarjansNode n6 = new TarjansNode(6);
+        TarjansNode n7 = new TarjansNode(7);
+        TarjansNode n8 = new TarjansNode(8);
+        TarjansNode n9 = new TarjansNode(9);
+        TarjansNode n10 = new TarjansNode(10);
+        TarjansNode n11 = new TarjansNode(11);
+
+        dg.addNode(n1);
+        dg.addNode(n2);
+        dg.addNode(n3);
+        dg.addNode(n4);
+        dg.addNode(n5);
+        dg.addNode(n6);
+        dg.addNode(n7);
+        dg.addNode(n8);
+        dg.addNode(n9);
+        dg.addNode(n10);
+        dg.addNode(n11);
+
+        n1.connectChild(n2);
+        n2.connectChild(n3);
+        n2.connectChild(n7);
+
+        n3.connectChild(n4);
+        n3.connectChild(n6);
+        n4.connectChild(n5);
+        n5.connectChild(n6);
+        n6.connectChild(n4);
+        n7.connectChild(n1);
+        n7.connectChild(n2);
+        n7.connectChild(n9);
+        n8.connectChild(n6);
+        n8.connectChild(n10);
+        n8.connectChild(n11);
+        n9.connectChild(n8);     
+        n10.connectChild(n5);
+        n10.connectChild(n11);
+        n11.connectChild(n9);
+        return dg;
+    }
+
 }
