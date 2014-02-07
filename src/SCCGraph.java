@@ -1,7 +1,6 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public interface SCCGraph<NodeType extends DeNode<?,
-                          ? extends SCCGraph<?>>>
+public interface SCCGraph<NodeType extends DeNode<?, ? extends SCCGraph<?>>>
                           extends Comparable<SCCGraph<DeNode<?, SCCGraph<?>>>>{
 
 	public void addNode(NodeType node);

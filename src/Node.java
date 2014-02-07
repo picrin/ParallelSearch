@@ -20,7 +20,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-class Node implements DeNode<Node>{
+class Node implements DeNode<Node, DataGraph>{
 	final long id;
 	final static int childrenNo = 5;
 	boolean predecessor;
@@ -116,7 +116,7 @@ class Node implements DeNode<Node>{
     }
     
     @Override
-    public int compareTo(DeNode<?> node) {
+    public int compareTo(DeNode<?, ?> node) {
         return Long.compare(this.id, node.getID());
     }
 

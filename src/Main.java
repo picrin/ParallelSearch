@@ -29,9 +29,10 @@ public class Main{
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		for (NonBlockingHashMap map: dg.solutions){
-			System.out.println(map);
-		}
+		DataGraph.solutions.equals(DataGraph.solutions);
+		//for (NonBlockingHashMap map: dg.solutions){
+		//	//System.out.println(map);
+		//}
 	}
 	
 	

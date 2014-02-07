@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 //import java.io.Serializable;
 
-public class DataGraph implements SCCGraph<Node>{
+public class DataGraph extends AbstractGraph<Node>{
     //private static final long serialVersionUID;
     static ExecutorService threadPool;
     static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
@@ -95,11 +95,6 @@ public class DataGraph implements SCCGraph<Node>{
 	@Override
 	public void reportSolution(NonBlockingHashMap<Long, Node> solution) {
 		solutions.add(solution);
-	}
-
-	@Override
-	public int compareTo(SCCGraph<DeNode<?>> otherGraph) {
-		return -1;
 	}
 
 }
