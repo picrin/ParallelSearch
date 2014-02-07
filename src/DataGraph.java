@@ -25,11 +25,10 @@ import java.util.concurrent.ForkJoinPool;
 public class DataGraph extends AbstractGraph<Node>{
     //private static final long serialVersionUID;
     static ExecutorService threadPool;
-    static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
-    
+    protected ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
+    protected DataGraph rootGraph;
     static {
     	//serialVersionUID = 31337_4045L;
-    	solutions = new ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>>();
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
     	} catch (NullPointerException e){
@@ -43,7 +42,9 @@ public class DataGraph extends AbstractGraph<Node>{
     NonBlockingHashMap<Long, Node> descendants;
     
     public DataGraph(){
-        try{
+    	rootGraph = this;
+    	solutions = new ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>>();
+    	try{
             remainder = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
             scc = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
             predecessors = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
@@ -53,9 +54,11 @@ public class DataGraph extends AbstractGraph<Node>{
         }
     }
 
-    public DataGraph(NonBlockingHashMap<Long, Node> remainder){
-        try{
-            this.remainder = remainder;
+    public DataGraph(NonBlockingHashMap<Long, Node> remainder, DataGraph rootGraph){
+    	this.remainder = remainder;
+    	//System.out.println(rootGraph);
+        this.rootGraph = rootGraph; 
+    	try{
             scc = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
             predecessors = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
             descendants = new NonBlockingHashMap<Long, Node>(GraphFactory.sizeToCap(remainder.size()));
@@ -64,7 +67,7 @@ public class DataGraph extends AbstractGraph<Node>{
         }
     }
     
-    public DataGraph(Iterable<Node> nodes){
+    /*public DataGraph(Iterable<Node> nodes){
         try {
             remainder = new NonBlockingHashMap<Long, Node>(GraphFactory.locales.hashMapCap);
             for (Node node : nodes){
@@ -73,7 +76,7 @@ public class DataGraph extends AbstractGraph<Node>{
         } catch (NullPointerException e){
             System.err.println("remember to set locales by invoking DataGraph.setLocales()");
         }
-    }
+    }*/
     
     /*public DataGraph(Node[] nodes){
         remainder = new NodeHashMap(Globals.threads, Globals.hashMapCap, Globals.loadFactor);
@@ -89,12 +92,12 @@ public class DataGraph extends AbstractGraph<Node>{
 
 	@Override
 	public ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> getSolutions() {
-		return solutions;
+		return rootGraph.solutions;
 	}
 
 	@Override
 	public void reportSolution(NonBlockingHashMap<Long, Node> solution) {
-		solutions.add(solution);
+		rootGraph.getSolutions().add(solution);
 	}
 
 }

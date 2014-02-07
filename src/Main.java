@@ -5,11 +5,13 @@
  * you a few pointers.
  * Adam
  */
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
-import org.junit.Assert;
+//import org.junit.Assert;
 
 
 
@@ -19,9 +21,8 @@ public class Main{
 		GraphFactory.setProblemLocales(ProblemLocales.exampleLocales());
 		uberPool = new ForkJoinPool(GraphFactory.locales.threads);
 	}
-
-	public static void main(String[] args){
-		DataGraph dg = GraphFactory.makeTwoRandomSparseGraphs(10000, 3).get(0);
+	
+	static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> giveSolutions(DataGraph dg){
 		UltimateRecurssion newRecurssion = new UltimateRecurssion(dg);
 		Future<?> future = uberPool.submit(newRecurssion);
 		try {
@@ -29,10 +30,26 @@ public class Main{
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		DataGraph.solutions.equals(DataGraph.solutions);
-		//for (NonBlockingHashMap map: dg.solutions){
-		//	//System.out.println(map);
-		//}
+		return dg.getSolutions();
+	}
+	
+	public static void main(String[] args){
+		ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 2);
+		
+		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
+		//SCCGraph<? extends DeNode<?, ?>> tusia;
+		//tusia = graphs.get(0);
+		for (NonBlockingHashMap<Long, Node> map: giveSolutions(graphs.get(0))){
+			//System.out.println(map);
+		}
+
+		for (NonBlockingHashMap<Long, Node> map: giveSolutions(graphs.get(1))){
+			//System.out.println(map);
+		}
+
+		graphs.get(0).compareTo(graphs.get(1));
+
+		
 	}
 	
 	

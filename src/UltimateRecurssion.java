@@ -16,7 +16,7 @@ class UltimateRecurssion extends RecursiveAction{
 				Node lastMohican = dg.remainder.values().iterator().next();
 				NonBlockingHashMap<Long, Node> map = new NonBlockingHashMap<Long, Node>();
 				map.put(lastMohican.id, lastMohican);
-				DataGraph.solutions.add(map);
+				dg.reportSolution(map);
 				return;
 			}
 			else {
@@ -37,12 +37,12 @@ class UltimateRecurssion extends RecursiveAction{
 				predecessors.awaitExploration();				
 				descendants.awaitExploration();
 				ArrayList<UltimateRecurssion> tasks = new ArrayList<UltimateRecurssion>(3);
+				//System.out.println(dg.scc);
+				dg.reportSolution(dg.scc);
 				
-				DataGraph.solutions.add(dg.scc);
-				
-				DataGraph remainingPredecessors = new DataGraph(dg.predecessors);
-				DataGraph remainingDescendants = new DataGraph(dg.descendants);
-				DataGraph remainder = new DataGraph(dg.remainder);
+				DataGraph remainingPredecessors = new DataGraph(dg.predecessors, dg.rootGraph);
+				DataGraph remainingDescendants = new DataGraph(dg.descendants, dg.rootGraph);
+				DataGraph remainder = new DataGraph(dg.remainder, dg.rootGraph);
 				
 				//System.out.println("scc = " + dg.scc);
 				//System.out.println("pred = " + dg.predecessors);
