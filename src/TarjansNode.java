@@ -20,13 +20,21 @@ import java.util.ArrayList;
 
 public class TarjansNode implements DeNode<TarjansNode, TarjansGraph> {
 
+	
+	
 	protected ArrayList<TarjansNode> parents = new ArrayList<>();
 	protected ArrayList<TarjansNode> children = new ArrayList<>();
+	
+	// needed for Tarjan's algorithm
 	protected boolean visit;
-	protected boolean childExists = true;
 	protected Long id;
+	protected long IDtarjans = 0;
+	protected boolean hasLowlink = false;
+	protected long lowlink;
 	TarjansGraph graph;
 	
+	
+	// CONSTRUCTORS:
 	public TarjansNode(){}
 	
 	public TarjansNode(ArrayList<TarjansNode> parents, ArrayList<TarjansNode> children){
@@ -35,39 +43,56 @@ public class TarjansNode implements DeNode<TarjansNode, TarjansGraph> {
 		this.parents = parents;
 		this.visit = false;
 	}
+	
 	public TarjansNode(long id){
 		this.id = id;
 	}
 	
+	// GETTER and SETTER methods:
+	public void setIDtarjans(long value){
+		this.IDtarjans=value;
+	}
+	
+	public long getIDtarjans(){ return this.IDtarjans; }
+	
 	public TarjansNode getChild(){
-		childExists = false;
 		for(TarjansNode child:children){
 			if(!child.visited()){
-				childExists = true;
 				return child;
 			}
 		}
 		return null;
 	}
+	
+	@Override
+	public ArrayList<TarjansNode> getChildren() {
+		return this.children;
+	}
+	
+	@Override
+	public void connectChild(TarjansNode child) {
+		child.parents.add(this);
+		this.children.add(child);		
+	}
+	
 	public TarjansNode getParent(TarjansNode node, int index){
 		return this.parents.get(index);
 	}
 	
-	
-	public boolean allChildrenVisited(TarjansNode node){
-		for(TarjansNode child:node.getChildren()){
-			if(child.visited()==false){return true;}
-		}
-		return false;
-	}
 	public void setVisited(boolean visited){
 		this.visit=visited;
 	}
+	
 	public boolean visited(){
 		return this.visit;
-	}	
-	public boolean doesChildExist(){
-		return this.childExists;
+	}
+	
+	public void setLOWLINK(long value){
+		this.lowlink=value;
+	}
+	
+	public long getLOWLINK(){
+		return this.lowlink;
 	}
 	
 	@Override
@@ -81,19 +106,8 @@ public class TarjansNode implements DeNode<TarjansNode, TarjansGraph> {
 	}
 
 	@Override
-	public ArrayList<TarjansNode> getChildren() {
-		return this.children;
-	}
-
-	@Override
 	public ArrayList<TarjansNode> getParents() {
 		return this.parents;
-	}
-
-	@Override
-	public void connectChild(TarjansNode child) {
-		child.parents.add(this);
-		this.children.add(child);		
 	}
 
 	@Override
@@ -104,6 +118,15 @@ public class TarjansNode implements DeNode<TarjansNode, TarjansGraph> {
 	@Override
 	public int compareTo(DeNode<?, ?> o) {
 		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
+	
+	@Override
+	public String toString(){
+		return "node" + id;
+	}
+	
+	
+	
+	
 }
