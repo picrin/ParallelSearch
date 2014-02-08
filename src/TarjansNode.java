@@ -7,13 +7,14 @@ public class TarjansNode implements DeNode<TarjansNode, TarjansGraph> {
 	
 	protected ArrayList<TarjansNode> parents = new ArrayList<>();
 	protected ArrayList<TarjansNode> children = new ArrayList<>();
+	
+	// needed for Tarjan's algorithm
 	protected boolean visit;
 	protected Long id;
 	protected long IDtarjans = 0;
 	protected boolean hasLowlink = false;
 	protected long lowlink;
 	TarjansGraph graph;
-	
 	
 	
 	// CONSTRUCTORS:

@@ -44,36 +44,5 @@ public class TarjansAlgorithm extends TarjansGraph{
 			}
 			solutions.add(SCCs);
 		}
-	}
-	
-	/**
-	public void DFS(TarjansNode previousNode, ArrayList<TarjansNode> nodes){
-		Stack<TarjansNode> stack = new Stack<TarjansNode>();
-		stack.push(previousNode);
-		ArrayList<TarjansNode> result = new ArrayList<>();
-		result.add(previousNode);
-		previousNode.setVisited(true);
-		while(!stack.isEmpty()){
-			TarjansNode node = (TarjansNode)stack.peek();
-			TarjansNode child = node.getChild();
-			if(child!=null){
-				child.setVisited(true);
-				stack.push(child);
-				result.add(child);
-			}
-			else{ stack.pop(); }
-		}
-		for(TarjansNode node: result){ node.setVisited(false);}
-	}
-	
-	public boolean isItStronglyConnected(long v, long w){
-		return v==w;
-	}
-	**/
-	
-	
-	
-	
-	
-	
+	}	
 }
