@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 
 
-public class Main{
+public class Bleh{
 	final static ForkJoinPool uberPool;
 	static{
 		GraphFactory.setProblemLocales(ProblemLocales.exampleLocales());
@@ -34,23 +34,22 @@ public class Main{
 	}
 	
 	public static void main(String[] args){
-		//ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 2);
-		DataGraph dg = GraphFactory.makeSanityCheckGraph();
-		TarjansGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
+		ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 3);
+		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
+		//TarjansGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
 		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
 		//SCCGraph<? extends DeNode<?, ?>> tusia;
 		//tusia = graphs.get(0);
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(dg)){
+		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(graphs.get(0))){
 			System.out.println(map);
 		}
 
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: dgt.getSolutions()){
+		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(graphs.get(1))){
 			System.out.println(map);
 		}
-
-		//graphs.get(0).compareTo(graphs.get(1));
 		
-		//dg.compareTo(dgt);
+		
+		System.out.println(graphs.get(0).compareTo(graphs.get(1)));
 		
 	}
 		
