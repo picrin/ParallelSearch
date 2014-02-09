@@ -116,19 +116,19 @@ public class GraphFactory<NodeType extends DeNode<?, ?>, GraphType extends SCCGr
         return dg;
     }
 
-    public static TarjansGraph makeSanityCheckGraphTarjan(){
-    	TarjansGraph dg = new TarjansGraph();
-        TarjansNode n1 = new TarjansNode(1);
-        TarjansNode n2 = new TarjansNode(2);
-        TarjansNode n3 = new TarjansNode(3);
-        TarjansNode n4 = new TarjansNode(4);
-        TarjansNode n5 = new TarjansNode(5);
-        TarjansNode n6 = new TarjansNode(6);
-        TarjansNode n7 = new TarjansNode(7);
-        TarjansNode n8 = new TarjansNode(8);
-        TarjansNode n9 = new TarjansNode(9);
-        TarjansNode n10 = new TarjansNode(10);
-        TarjansNode n11 = new TarjansNode(11);
+    public static TarjanGraph makeSanityCheckGraphTarjan(){
+    	TarjanGraph dg = new TarjanGraph();
+        TarjanNode n1 = new TarjanNode(1);
+        TarjanNode n2 = new TarjanNode(2);
+        TarjanNode n3 = new TarjanNode(3);
+        TarjanNode n4 = new TarjanNode(4);
+        TarjanNode n5 = new TarjanNode(5);
+        TarjanNode n6 = new TarjanNode(6);
+        TarjanNode n7 = new TarjanNode(7);
+        TarjanNode n8 = new TarjanNode(8);
+        TarjanNode n9 = new TarjanNode(9);
+        TarjanNode n10 = new TarjanNode(10);
+        TarjanNode n11 = new TarjanNode(11);
 
         dg.addNode(n1);
         dg.addNode(n2);

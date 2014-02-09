@@ -34,21 +34,23 @@ public class Main{
 	}
 	
 	public static void main(String[] args){
+		//String filepath = args[0];
+		//FileReader fr = new FileReader(filepath);
 		//ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 2);
 		DataGraph dg = GraphFactory.makeSanityCheckGraph();
-		TarjansGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
+		TarjanGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
 		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
 		//SCCGraph<? extends DeNode<?, ?>> tusia;
 		//tusia = graphs.get(0);
 		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(dg)){
-			System.out.println(map);
+			//System.out.println(map);
 		}
-
+		dgt.start();
 		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: dgt.getSolutions()){
-			System.out.println(map);
+			//System.out.println(map);
 		}
 
-		//graphs.get(0).compareTo(graphs.get(1));
+		System.out.println(dg.compareTo(dgt));
 		
 		//dg.compareTo(dgt);
 		
