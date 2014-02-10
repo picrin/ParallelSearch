@@ -30,14 +30,16 @@ public class DataGraph extends AbstractGraph<Node>{
     protected ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
     protected DataGraph rootGraph;
     static {
-    	//serialVersionUID = 31337_4045L;
+    	setLocales();//serialVersionUID = 31337_4045L;
+
+    }
+    static void setLocales(){
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
     	} catch (NullPointerException e){
-            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+            System.err.println("remember to set locales in graph factory");
         }
     }
-    
     NonBlockingHashMap<Long, Node> remainder;
     NonBlockingHashMap<Long, Node> scc;
     NonBlockingHashMap<Long, Node> predecessors;
@@ -103,7 +105,8 @@ public class DataGraph extends AbstractGraph<Node>{
 	}
 
 	@Override
-	public void start() {
+	public long start() {
+		long startTime = System.currentTimeMillis();
 		UltimateRecurssion newRecurssion = new UltimateRecurssion(this);
 		ForkJoinPool fjp = new ForkJoinPool(GraphFactory.locales.threads);
 		Future<?> future = fjp.submit(newRecurssion);
@@ -112,6 +115,8 @@ public class DataGraph extends AbstractGraph<Node>{
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
+		long stopTime = System.currentTimeMillis();
+		return stopTime - startTime;
 	}
 
 	@Override

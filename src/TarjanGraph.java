@@ -28,12 +28,15 @@ public class TarjanGraph extends AbstractGraph<TarjanNode>{
 	
 	private LinkedList<TarjanNode> tarjanStack = new LinkedList<TarjanNode>();
 	private int currentIndex = 0;
-	public void start(){
+	public long start(){
+		long startTime = System.currentTimeMillis();
 		for(TarjanNode node: nodes){
 			if(!node.isExplored()){
 				explore(node);
 			}
 		}
+		long stopTime = System.currentTimeMillis();
+		return stopTime - startTime;
 	}
 	
 	protected void explore(TarjanNode node){		
