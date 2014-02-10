@@ -59,7 +59,6 @@ public class TarjanNode implements DeNode<TarjanNode, TarjanGraph> {
 		return stacked;
 	}*/
 
-	
 	@Override
 	public int compareTo(DeNode<?, ?> otherNode) {
 		return Long.compare(id, otherNode.getID());
