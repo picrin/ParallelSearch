@@ -21,20 +21,22 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class Node implements DeNode<Node, DataGraph>{
-	final long id;
+	long id;
 	final static int childrenNo = 5;
 	boolean predecessor;
 	boolean descendant;
 	DataGraph graph;
 	ArrayList<Node> children = new ArrayList<Node>(childrenNo);
 	ArrayList<Node> parents = new ArrayList<Node>(childrenNo);
-	
-    public Node(long id){
-        this.id = id;
+	public Node(){
+		this.id = 0;
         predecessor = false;
     	descendant = false;
-    	graph = null;
-
+    	graph = null;		
+	}
+    public Node(long id){
+    	this();
+    	this.id = id;
     }
     
     /**
@@ -130,6 +132,11 @@ class Node implements DeNode<Node, DataGraph>{
 	public ArrayList<Node> getParents() {
 		// TODO Auto-generated method stub
 		return this.parents;
+	}
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
 	}
 
 }

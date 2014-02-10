@@ -22,35 +22,16 @@ public class Bleh{
 		uberPool = new ForkJoinPool(GraphFactory.locales.threads);
 	}
 	
-	static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> giveSolutions(DataGraph dg){
-		UltimateRecurssion newRecurssion = new UltimateRecurssion(dg);
-		Future<?> future = uberPool.submit(newRecurssion);
-		try {
-			future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-		return dg.getSolutions();
-	}
-	
 	public static void main(String[] args){
-		ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 3);
+		//ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 3);
+		Class<AbstractGraph<?>> classa = AbstractGraph.class;
+	
 		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
 		//TarjansGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
 		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
 		//SCCGraph<? extends DeNode<?, ?>> tusia;
 		//tusia = graphs.get(0);
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(graphs.get(0))){
-			System.out.println(map);
-		}
-
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(graphs.get(1))){
-			System.out.println(map);
-		}
-		
-		
-		System.out.println(graphs.get(0).compareTo(graphs.get(1)));
-		
+				
 	}
 		
 }

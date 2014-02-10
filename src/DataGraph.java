@@ -18,9 +18,11 @@
  */
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 //import java.io.Serializable;
+import java.util.concurrent.Future;
 
 public class DataGraph extends AbstractGraph<Node>{
     //private static final long serialVersionUID;
@@ -28,14 +30,16 @@ public class DataGraph extends AbstractGraph<Node>{
     protected ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> solutions;
     protected DataGraph rootGraph;
     static {
-    	//serialVersionUID = 31337_4045L;
+    	setLocales();//serialVersionUID = 31337_4045L;
+
+    }
+    static void setLocales(){
     	try{
     		threadPool = new ForkJoinPool(GraphFactory.locales.threads);
     	} catch (NullPointerException e){
-            System.err.println("remember to set locales by invoking DataGraph.setLocales()");
+            System.err.println("remember to set locales in graph factory");
         }
     }
-    
     NonBlockingHashMap<Long, Node> remainder;
     NonBlockingHashMap<Long, Node> scc;
     NonBlockingHashMap<Long, Node> predecessors;
@@ -100,4 +104,23 @@ public class DataGraph extends AbstractGraph<Node>{
 		rootGraph.getSolutions().add(solution);
 	}
 
+	@Override
+	public long start() {
+		long startTime = System.currentTimeMillis();
+		UltimateRecurssion newRecurssion = new UltimateRecurssion(this);
+		ForkJoinPool fjp = new ForkJoinPool(GraphFactory.locales.threads);
+		Future<?> future = fjp.submit(newRecurssion);
+		try {
+			future.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		long stopTime = System.currentTimeMillis();
+		return stopTime - startTime;
+	}
+
+	@Override
+	public NonBlockingHashMap<Long, Node> getNodes() {
+		return remainder;
+	}
 }

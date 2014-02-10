@@ -16,13 +16,11 @@ import java.util.concurrent.Future;
 
 
 public class Main{
-	final static ForkJoinPool uberPool;
 	static{
 		GraphFactory.setProblemLocales(ProblemLocales.exampleLocales());
-		uberPool = new ForkJoinPool(GraphFactory.locales.threads);
 	}
 	
-	static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> giveSolutions(DataGraph dg){
+	/*static ConcurrentLinkedQueue<NonBlockingHashMap<Long, Node>> giveSolutions(DataGraph dg){
 		UltimateRecurssion newRecurssion = new UltimateRecurssion(dg);
 		Future<?> future = uberPool.submit(newRecurssion);
 		try {
@@ -31,29 +29,55 @@ public class Main{
 			e.printStackTrace();
 		}
 		return dg.getSolutions();
-	}
+	}*/
 	
 	public static void main(String[] args){
 		//String filepath = args[0];
 		//FileReader fr = new FileReader(filepath);
 		//ArrayList<DataGraph> graphs = GraphFactory.makeTwoRandomSparseGraphs(10, 2);
-		DataGraph dg = GraphFactory.makeSanityCheckGraph();
-		TarjanGraph dgt = GraphFactory.makeSanityCheckGraphTarjan();
+		int graphSize = 10000;
+		int threads = 1;
+		int maxThreads = 10;
+		int repetitions = 4;
+		DataGraph dg;
+		TarjanGraph dgt;
 		//DataGraph dg = GraphFactory.makeSanityCheckGraph();
 		//SCCGraph<? extends DeNode<?, ?>> tusia;
 		//tusia = graphs.get(0);
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(dg)){
+		/*for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: giveSolutions(dg)){
 			//System.out.println(map);
-		}
-		dgt.start();
-		for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: dgt.getSolutions()){
-			//System.out.println(map);
-		}
+		}*/
+		System.out.println("# Cores | SCC speed | Tarjan ");
+		for(int i = threads; i < maxThreads; i++){
 
-		System.out.println(dg.compareTo(dgt));
+			ProblemLocales locales = new ProblemLocales(graphSize, i, 0.75F);
+		    GraphFactory.setProblemLocales(locales);
+		    DataGraph.setLocales();
+		    
+		    for(int ii = 0; ii < repetitions; ii++){
+			    System.out.print(i + " ");
+			    dg = new DataGraph();
+				dgt = new TarjanGraph();
+				
+			    GraphFactory.changeSeed();
+				GraphFactory.makeRandomSparseGraph(graphSize, 2, dg, Node.class);
+				GraphFactory.makeRandomSparseGraph(graphSize, 2, dgt, TarjanNode.class);
+				long dgtResult = dgt.start();
+				long dgResult = dg.start();
+				System.out.print(dgResult + " ");
+				System.out.println(dgtResult + " ");
+		    }
+		    
+		}
+		/*for (NonBlockingHashMap<Long, ? extends DeNode<?, ?>> map: dgt.getSolutions()){
+			//System.out.println(map);
+		}*/
+
+		//System.out.println(dg.compareTo(dgt));
+		//System.out.println(dg.getNodes().get(1).getChildren());
+		//System.out.println(dgt.getSolutions());
 		
 		//dg.compareTo(dgt);
-		
 	}
-		
+
 }

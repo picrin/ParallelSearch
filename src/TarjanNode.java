@@ -22,13 +22,11 @@ public class TarjanNode implements DeNode<TarjanNode, TarjanGraph> {
 	public String toString(){
 		return "tarjanNode" + this.id; 
 	}
-
 	
 	public TarjanNode(){
 		children = new ArrayList<TarjanNode>();
 		parents = new ArrayList<TarjanNode>();
 		explored  = false;
-		//stacked = false;
 		SCCd = false;
 	}
 	
@@ -93,6 +91,13 @@ public class TarjanNode implements DeNode<TarjanNode, TarjanGraph> {
 	@Override
 	public void setGraph(TarjanGraph graph) {
 		this.graph = graph;
+	}
+
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
+		
 	}
 
 }
