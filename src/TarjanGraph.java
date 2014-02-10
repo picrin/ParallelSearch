@@ -13,8 +13,12 @@ public class TarjanGraph extends AbstractGraph<TarjanNode>{
 		nodes.add(node);
 	}
 	
-	public HashSet<TarjanNode> getNodes(){
-		return nodes;
+	public NonBlockingHashMap<Long, TarjanNode> getNodes(){
+		NonBlockingHashMap<Long, TarjanNode> map = new NonBlockingHashMap<>();
+		for(TarjanNode node: nodes){
+			map.put(node.getID(), node);
+		}
+		return map;
 	}
 	
 	TarjanGraph(){

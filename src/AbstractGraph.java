@@ -40,8 +40,8 @@ public abstract class AbstractGraph<NodeType extends DeNode<?, ?>> implements SC
 		return arrayList;
 	}
 	
-	public void magia(SCCGraph<? extends DeNode<?, ?>> t) {
-	}
+	//public void magia(SCCGraph<? extends DeNode<?, ?>> t) {
+	//}
 	//@Override
 	public int compareTo(SCCGraph<? extends DeNode<?, ?>> otherGraph) {
 		
@@ -58,12 +58,12 @@ public abstract class AbstractGraph<NodeType extends DeNode<?, ?>> implements SC
 		/*
 		 * TODO vide supra. 
 		 */
-
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		ArrayList<TreeMap<Long, ? extends DeNode<?, ?>>> array2 = 
 				queueToArrayList( (ConcurrentLinkedQueue) this.getSolutions());
-		System.out.println(array1);
-		System.out.println(array2);
+		
+		//System.out.println(array1);
+		//System.out.println(array2);
 		if (array1.size() < array2.size()) return -1;
 		if (array1.size() > array2.size()) return 1;
 		else{

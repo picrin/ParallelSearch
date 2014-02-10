@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class GraphFactory<NodeType extends DeNode<?, ?>, GraphType extends SCCGraph<?>> {
-    private GraphFactory(){};
+public class GraphFactory {
+	static Random generator = new Random();
+	static long seed = generator.nextLong();
+	
+	public static void changeSeed(){
+		seed = generator.nextLong();
+	}
+	
+	public GraphFactory(){};
     
     static ProblemLocales locales;
     
@@ -18,7 +25,8 @@ public class GraphFactory<NodeType extends DeNode<?, ?>, GraphType extends SCCGr
     }
 
     public static DataGraph makeRandomGraph(int size){
-        Random generator = new Random();
+        generator.setSeed(seed);
+        //System.out.println(generator.nextFloat());
         DataGraph dg = new DataGraph();
         Node[] nodes = new Node[size];
         for(int i = 0; i < size; i++){
@@ -37,36 +45,25 @@ public class GraphFactory<NodeType extends DeNode<?, ?>, GraphType extends SCCGr
         }
         return dg; 
     }
-
-    public static ArrayList<DataGraph> makeTwoRandomSparseGraphs(int size, int noChildren){
-        Random generator = new Random();
-        DataGraph dg1 = new DataGraph();
-        DataGraph dg2 = new DataGraph();
-        Node[] nodes1 = new Node[size];
-        Node[] nodes2 = new Node[size];
+    public static <GraphType extends AbstractGraph<NodeType>, NodeType extends DeNode<NodeType, ?>> void makeRandomSparseGraph(int size, int noChildren, GraphType graph, Class<NodeType> nodeContext){
+        generator.setSeed(seed);
+        NodeBuilder<NodeType> builder = new NodeBuilder<NodeType>(nodeContext);
+        ArrayList<NodeType> nodes = new ArrayList<NodeType>(size);
 
         for(int i = 0; i < size; i++){
-            Node newNode1 = new Node(i + 1);
-            Node newNode2 = new Node(i + 1);
-            nodes1[i] = newNode1;
-            nodes2[i] = newNode2;
-            dg1.addNode(newNode1);
-            dg2.addNode(newNode2);
+            NodeType newNode = builder.newNode(i + 1);
+            nodes.add(i, newNode);
+            graph.addNode(newNode);
         }
         
         for(int i = 0; i < size; i++){
             for(int ii = 0; ii < noChildren; ii++){
             	int nextInt = generator.nextInt(size);
-                nodes1[i].connectChild(nodes1[nextInt]);
-                nodes2[i].connectChild(nodes2[nextInt]);
-                //System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);
-                
+            	//System.out.println(nextInt);
+            	nodes.get(i).connectChild(nodes.get(nextInt));
+                //System.out.println("connected " + nodes[i].id + " with " + nodes[ii].id);        
             }
         }
-        ArrayList<DataGraph> arrayList = new ArrayList<DataGraph>();
-        arrayList.add(dg1);
-        arrayList.add(dg2);
-        return arrayList;
     }
     public static DataGraph makeSanityCheckGraph(){
         DataGraph dg = new DataGraph();

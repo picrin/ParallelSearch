@@ -29,7 +29,7 @@ public interface DeNode<FamilyNode extends DeNode<?, ?>,
                         extends Comparable<DeNode<?, ?>>{
 
 	public Long getID();
-	
+	void setID(long id);
 	public GraphType getGraph();
 	public void setGraph(GraphType graph);
 

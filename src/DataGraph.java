@@ -18,9 +18,11 @@
  */
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 //import java.io.Serializable;
+import java.util.concurrent.Future;
 
 public class DataGraph extends AbstractGraph<Node>{
     //private static final long serialVersionUID;
@@ -100,4 +102,20 @@ public class DataGraph extends AbstractGraph<Node>{
 		rootGraph.getSolutions().add(solution);
 	}
 
+	@Override
+	public void start() {
+		UltimateRecurssion newRecurssion = new UltimateRecurssion(this);
+		ForkJoinPool fjp = new ForkJoinPool(GraphFactory.locales.threads);
+		Future<?> future = fjp.submit(newRecurssion);
+		try {
+			future.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public NonBlockingHashMap<Long, Node> getNodes() {
+		return remainder;
+	}
 }
