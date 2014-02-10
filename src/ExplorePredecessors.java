@@ -30,7 +30,7 @@ final class ExplorePredecessors implements Runnable{
 	protected int innerCounter;
     
 	//TODO tweak this value to make it fit the real data. 20 is a safe bet, I'd like to see how good it is for 200 or 2000.
-    public static int spawnRate = 2;//00; 
+    public static int spawnRate = 2000;//00; 
     
     protected ExplorePredecessors(ArrayList<Node> startParents, GraphExplorator explorator){
     	//System.out.println("being called");
