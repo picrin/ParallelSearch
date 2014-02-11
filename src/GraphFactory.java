@@ -160,5 +160,62 @@ public class GraphFactory {
         n11.connectChild(n9);
         return dg;
     }
+    
+    public static KosarajuGraph makeSanityCheckKosarajuGraph(){
+    	KosarajuGraph kdg = new KosarajuGraph();
+        TarjanNode n1 = new TarjanNode(1);
+        TarjanNode n2 = new TarjanNode(2);
+        TarjanNode n3 = new TarjanNode(3);
+        TarjanNode n4 = new TarjanNode(4);
+        TarjanNode n5 = new TarjanNode(5);
+        TarjanNode n6 = new TarjanNode(6);
+        TarjanNode n7 = new TarjanNode(7);
+        TarjanNode n8 = new TarjanNode(8);
+        TarjanNode n9 = new TarjanNode(9);
+        TarjanNode n10 = new TarjanNode(10);
+        TarjanNode n11 = new TarjanNode(11);
+
+        kdg.addNode(n1);
+        kdg.addNode(n2);
+        kdg.addNode(n3);
+        kdg.addNode(n4);
+        kdg.addNode(n5);
+        kdg.addNode(n6);
+        kdg.addNode(n7);
+        kdg.addNode(n8);
+        kdg.addNode(n9);
+        kdg.addNode(n10);
+        kdg.addNode(n11);
+
+        n1.connectChild(n2);
+        
+        n2.connectChild(n3);
+        n2.connectChild(n7);
+
+        n3.connectChild(n4);
+        n3.connectChild(n6);
+        
+        n4.connectChild(n5);
+        
+        n5.connectChild(n6);
+        
+        n6.connectChild(n4);
+        
+        n7.connectChild(n1);
+        n7.connectChild(n2);
+        n7.connectChild(n9);
+        
+        n8.connectChild(n6);
+        n8.connectChild(n10);
+        n8.connectChild(n11);
+        
+        n9.connectChild(n8);     
+        
+        n10.connectChild(n5);
+        n10.connectChild(n11);
+        
+        n11.connectChild(n9);
+        return kdg;
+    }
 
 }
